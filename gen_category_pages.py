@@ -79,6 +79,17 @@ def get_template(cat_key, cat_data):
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSFVXECJ40"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TSFVXECJ40');
+  </script>
+
   <title id="page-title">{name} Converter &mdash; Free Online {name} Unit Conversion | SwapUnits.online</title>
   <meta name="description" content="{desc} Free, fast, and accurate." />
   <meta name="keywords" content="{kw}" />

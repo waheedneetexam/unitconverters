@@ -365,6 +365,17 @@ def make_state_page(state):
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSFVXECJ40"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TSFVXECJ40');
+  </script>
+
   <title>{title}</title>
   <meta name="description" content="{desc_meta}" />
   <meta name="keywords" content="{name} land converter, {name} bigha to sq ft, land measurement {short}, bigha katha acre converter india" />
@@ -666,6 +677,17 @@ def make_hub_page():
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSFVXECJ40"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TSFVXECJ40');
+  </script>
+
   <title>Indian Land Unit Converter | Bigha, Katha, Acre by State | SwapUnits.online</title>
   <meta name="description" content="Free Indian land unit converter for all states. Convert Bigha, Katha, Biswa, Kanal, Marla, Ground, Cent, Guntha and more. State-specific converters for UP, Bihar, Punjab, West Bengal, Rajasthan, MP, Gujarat, Maharashtra, Tamil Nadu, Himachal Pradesh." />
   <meta name="keywords" content="indian land converter, bigha to sq ft, katha to sq ft, land measurement india, bigha calculator, kanal marla converter" />

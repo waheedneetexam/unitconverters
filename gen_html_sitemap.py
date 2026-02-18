@@ -43,6 +43,17 @@ def main():
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSFVXECJ40"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TSFVXECJ40');
+  </script>
+
   <title>Sitemap | SwapUnits.online</title>
   <meta name="description" content="Sitemap for SwapUnits.online. Easily navigate to all unit converters." />
   <meta name="robots" content="index, follow" />
