@@ -275,7 +275,7 @@ def fmt(num):
 NAV_CATS = [
     ("length","📏 Length"), ("temperature","🌡️ Temperature"), ("area","⬛ Area"),
     ("volume","🧊 Volume"), ("weight","⚖️ Weight"), ("time","⏱️ Time"),
-    ("speed","🚀 Speed"), ("pressure","🏁 Pressure"), ("energy","⚡ Energy"),
+    ("speed","🚀 Speed"), ("pressure","🔵 Pressure"), ("energy","⚡ Energy"),
 ]
 
 def make_nav_links(active_key="land"):
