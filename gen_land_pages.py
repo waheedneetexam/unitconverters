@@ -8,7 +8,11 @@ Base unit: Square Feet (sq ft)
 import os, math
 
 BASE = r"C:\Users\Administrator\Documents\AntiGravity\Units"
+if os.name == 'posix':
+    BASE = os.getcwd()
+
 LAND_DIR = os.path.join(BASE, "land")
+ADSENSE_PUB_ID = "ca-pub-2662293899276634"
 
 # ── State data ─────────────────────────────────────────────────────────────────
 # Each unit: (id, label, symbol, sq_ft_factor, note)
@@ -384,6 +388,8 @@ def make_state_page(state):
   </script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
   <link rel="stylesheet" href="../../css/style.css" />
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUB_ID}" crossorigin="anonymous"></script>
 </head>
 <body data-category="land">
 
@@ -397,7 +403,12 @@ def make_state_page(state):
   </header>
 
   <div class="ad-header" aria-label="Advertisement">
-    <div class="ad-placeholder banner" aria-hidden="true">Advertisement &mdash; 728&times;90 Leaderboard</div>
+    <!-- Middle Leaderboard -->
+    <ins class="adsbygoogle ad-placeholder banner"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="{ADSENSE_PUB_ID}"
+         data-ad-slot="1234567890"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
   </div>
 
   <nav class="site-nav" role="navigation" aria-label="Converter categories">
@@ -495,7 +506,13 @@ def make_state_page(state):
         </nav>
       </div>
       <div aria-label="Advertisement">
-        <div class="ad-placeholder sidebar" aria-hidden="true">Advertisement<br>300&times;250<br>Google AdSense</div>
+        <!-- Sidebar Ad -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="{ADSENSE_PUB_ID}"
+             data-ad-slot="1122334455"
+             data-ad-format="auto"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
       </div>
     </aside>
   </div>
@@ -660,6 +677,8 @@ def make_hub_page():
   <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
   <link rel="stylesheet" href="../css/style.css" />
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUB_ID}" crossorigin="anonymous"></script>
 </head>
 <body data-category="land">
 
@@ -673,7 +692,12 @@ def make_hub_page():
   </header>
 
   <div class="ad-header" aria-label="Advertisement">
-    <div class="ad-placeholder banner" aria-hidden="true">Advertisement &mdash; 728&times;90 Leaderboard</div>
+    <!-- Middle Leaderboard -->
+    <ins class="adsbygoogle ad-placeholder banner"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="{ADSENSE_PUB_ID}"
+         data-ad-slot="1234567890"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
   </div>
 
   <nav class="site-nav" role="navigation" aria-label="Converter categories">
@@ -737,7 +761,13 @@ def make_hub_page():
         </nav>
       </div>
       <div aria-label="Advertisement">
-        <div class="ad-placeholder sidebar" aria-hidden="true">Advertisement<br>300&times;250<br>Google AdSense</div>
+        <!-- Sidebar Ad -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="{ADSENSE_PUB_ID}"
+             data-ad-slot="1122334455"
+             data-ad-format="auto"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
       </div>
     </aside>
   </div>

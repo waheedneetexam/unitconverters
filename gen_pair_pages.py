@@ -7,6 +7,10 @@ URL structure: /{category}/{from-slug}-to-{to-slug}/index.html
 import os, math, itertools
 
 BASE = r"C:\Users\Administrator\Documents\AntiGravity\Units"
+if os.name == 'posix':
+    BASE = os.getcwd()
+
+ADSENSE_PUB_ID = "ca-pub-2662293899276634"
 
 # ── Unit data (mirrors converters.js exactly) ─────────────────────────────────
 CATEGORIES = {
@@ -461,7 +465,8 @@ def make_page(cat_key, cat, from_unit, to_unit):
   </script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2696;</text></svg>" />
   <link rel="stylesheet" href="../../css/style.css" />
-  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUB_ID}" crossorigin="anonymous"></script>
 </head>
 <body data-category="{cat_key}">
 
@@ -475,7 +480,12 @@ def make_page(cat_key, cat, from_unit, to_unit):
   </header>
 
   <div class="ad-header" aria-label="Advertisement">
-    <div class="ad-placeholder banner" aria-hidden="true">Advertisement &mdash; 728&times;90 Leaderboard</div>
+    <!-- Middle Leaderboard -->
+    <ins class="adsbygoogle ad-placeholder banner"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="{ADSENSE_PUB_ID}"
+         data-ad-slot="1234567890"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
   </div>
 
   <nav class="site-nav" role="navigation" aria-label="Converter categories">
@@ -569,7 +579,13 @@ def make_page(cat_key, cat, from_unit, to_unit):
         </nav>
       </div>
       <div aria-label="Advertisement">
-        <div class="ad-placeholder sidebar" aria-hidden="true">Advertisement<br>300&times;250<br>Google AdSense</div>
+        <!-- Sidebar Ad -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="{ADSENSE_PUB_ID}"
+             data-ad-slot="1122334455"
+             data-ad-format="auto"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
       </div>
     </aside>
   </div>

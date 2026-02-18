@@ -1,10 +1,1 @@
-# ads.txt — UnitConvert.net
-# Google AdSense Publisher Declaration
-# Replace XXXXXXXXXXXXXXXX with your actual Google AdSense Publisher ID
-# Format: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-
-google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-
-# Additional ad networks (add as needed):
-# media.net, XXXXXXXX, DIRECT
-# openx.com, XXXXXXXX, DIRECT
+google.com, pub-2662293899276634, DIRECT, f08c47fec0942fa0
