@@ -1,0 +1,12 @@
+# robots.txt — UnitConvert.net
+# Allow all search engine crawlers
+
+User-agent: *
+Allow: /
+
+# Disallow admin/private paths (if any)
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://www.unitconvert.net/sitemap.xml

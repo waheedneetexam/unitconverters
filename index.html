@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══ SEO Meta Tags ═══ -->
+  <title id="page-title">Unit Converter — Free Online Unit Conversion Tool | UnitConvert.net</title>
+  <meta name="description" content="Free online unit converter for length, temperature, area, volume, weight, time, speed, pressure, and energy. Fast, accurate, and easy to use. No signup required." />
+  <meta name="keywords" content="unit converter, length converter, temperature converter, metric converter, online unit conversion, free converter, measurement converter" />
+  <meta name="author" content="UnitConvert.net" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.unitconvert.net/" />
+
+  <!-- ═══ Open Graph (Social Sharing) ═══ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Unit Converter — Free Online Unit Conversion Tool" />
+  <meta property="og:description" content="Convert length, temperature, area, volume, weight, time, speed, pressure, and energy instantly. Free and accurate." />
+  <meta property="og:url" content="https://www.unitconvert.net/" />
+  <meta property="og:site_name" content="UnitConvert.net" />
+  <meta property="og:image" content="https://www.unitconvert.net/og-image.png" />
+
+  <!-- ═══ Twitter Card ═══ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Unit Converter — Free Online Tool" />
+  <meta name="twitter:description" content="Convert any unit instantly. Length, temperature, area, volume, weight, time, speed, pressure, energy." />
+
+  <!-- ═══ Structured Data (JSON-LD) ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "UnitConvert.net",
+    "url": "https://www.unitconvert.net/",
+    "description": "Free online unit converter for length, temperature, area, volume, weight, time, speed, pressure, and energy.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Length Converter",
+      "Temperature Converter",
+      "Area Converter",
+      "Volume Converter",
+      "Weight Converter",
+      "Time Converter",
+      "Speed Converter",
+      "Pressure Converter",
+      "Energy Converter"
+    ]
+  }
+  </script>
+
+  <!-- ═══ Favicon ═══ -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+
+  <!-- ═══ Stylesheet ═══ -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- ═══ Google AdSense (Replace ca-pub-XXXXXXXXXXXXXXXX with your Publisher ID) ═══ -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body data-category="length">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="/" class="site-logo" aria-label="UnitConvert.net Home">
+        Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span>
+      </a>
+      <span class="header-tagline">Free Online Unit Converter</span>
+    </div>
+  </header>
+
+  <!-- ═══ HEADER AD BANNER ═══ -->
+  <div class="ad-header" aria-label="Advertisement">
+    <!-- Google AdSense Leaderboard 728x90 -->
+    <!--
+    <ins class="adsbygoogle ad-placeholder banner"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="1234567890"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    -->
+    <div class="ad-placeholder banner" aria-hidden="true">
+      Advertisement — 728×90 Leaderboard<br><small>Google AdSense Slot</small>
+    </div>
+  </div>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav class="site-nav" role="navigation" aria-label="Converter categories">
+    <div class="nav-inner">
+      <a href="/length/"      class="nav-link active" data-category="length"      aria-label="Length Converter">📏 Length</a>
+      <a href="/temperature/" class="nav-link"         data-category="temperature" aria-label="Temperature Converter">🌡️ Temperature</a>
+      <a href="/area/"        class="nav-link"         data-category="area"        aria-label="Area Converter">⬛ Area</a>
+      <a href="/volume/"      class="nav-link"         data-category="volume"      aria-label="Volume Converter">🧊 Volume</a>
+      <a href="/weight/"      class="nav-link"         data-category="weight"      aria-label="Weight Converter">⚖️ Weight</a>
+      <a href="/time/"        class="nav-link"         data-category="time"        aria-label="Time Converter">⏱️ Time</a>
+      <a href="/speed/"       class="nav-link"         data-category="speed"       aria-label="Speed Converter">🚀 Speed</a>
+      <a href="/pressure/"    class="nav-link"         data-category="pressure"    aria-label="Pressure Converter">🔵 Pressure</a>
+      <a href="/energy/"      class="nav-link"         data-category="energy"      aria-label="Energy Converter">⚡ Energy</a>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN LAYOUT ═══ -->
+  <div class="page-wrapper">
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="main-content" role="main">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>›</span>
+        <span id="breadcrumb-current">Length Converter</span>
+      </nav>
+
+      <!-- Converter Card -->
+      <article class="converter-card" itemscope itemtype="https://schema.org/WebApplication">
+        <div class="converter-card-header">
+          <h1 id="converter-title" itemprop="name">Length Converter</h1>
+          <span class="calc-icon" aria-hidden="true">⚖️</span>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs" id="category-tabs" role="tablist" aria-label="Unit categories">
+          <!-- Built by app.js -->
+        </div>
+
+        <!-- Converter UI -->
+        <div class="converter-body" id="converter-body" role="tabpanel">
+          <!-- Built by app.js -->
+        </div>
+      </article>
+
+      <!-- In-Content Ad -->
+      <div aria-label="Advertisement">
+        <!-- Google AdSense Rectangle 728x90 -->
+        <!--
+        <ins class="adsbygoogle ad-placeholder in-content"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="0987654321"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        -->
+        <div class="ad-placeholder in-content" aria-hidden="true">
+          Advertisement — Responsive Ad Unit (Google AdSense)
+        </div>
+      </div>
+
+      <!-- Quick Reference Table -->
+      <section class="quick-ref" aria-labelledby="quick-ref-title">
+        <div class="quick-ref-header" id="quick-ref-title">Quick Reference — Length</div>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">From</th>
+              <th scope="col">To</th>
+            </tr>
+          </thead>
+          <tbody id="quick-ref-body">
+            <!-- Built by app.js -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SEO Content -->
+      <section class="seo-content" aria-label="About unit conversion">
+        <h2>About Unit Conversion</h2>
+        <p>
+          Unit conversion is the process of converting a measurement from one unit to another while maintaining the same quantity. Our free online unit converter supports all major measurement systems including the <strong>International System of Units (SI)</strong>, the <strong>Imperial system</strong>, and the <strong>US customary system</strong>.
+        </p>
+        <p>
+          Whether you need to convert meters to feet, Celsius to Fahrenheit, kilograms to pounds, or liters to gallons — UnitConvert.net provides instant, accurate results. All conversions are performed in real-time using precise conversion factors.
+        </p>
+        <h2>How to Use the Converter</h2>
+        <p>
+          1. Select a category tab (Length, Temperature, Area, etc.). 2. Enter your value in the <strong>From</strong> field. 3. Select the source unit from the left list. 4. Select the target unit from the right list. 5. The result appears instantly. Use the ⇄ button to swap units.
+        </p>
+      </section>
+
+    </main>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar" role="complementary" aria-label="All converters">
+
+      <!-- All Converters -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-header">All Converters</div>
+        <nav class="sidebar-links" aria-label="All converter categories">
+          <div class="sidebar-section-title">Common Converters</div>
+          <a href="/length/"      class="sidebar-link active" data-category="length">      <span class="link-icon">📏</span> Length Converter</a>
+          <a href="/temperature/" class="sidebar-link"         data-category="temperature"> <span class="link-icon">🌡️</span> Temperature Converter</a>
+          <a href="/area/"        class="sidebar-link"         data-category="area">        <span class="link-icon">⬛</span> Area Converter</a>
+          <a href="/volume/"      class="sidebar-link"         data-category="volume">      <span class="link-icon">🧊</span> Volume Converter</a>
+          <a href="/weight/"      class="sidebar-link"         data-category="weight">      <span class="link-icon">⚖️</span> Weight Converter</a>
+          <a href="/time/"        class="sidebar-link"         data-category="time">        <span class="link-icon">⏱️</span> Time Converter</a>
+
+          <div class="sidebar-section-title">Engineering Converters</div>
+          <a href="/speed/"       class="sidebar-link"         data-category="speed">       <span class="link-icon">🚀</span> Speed Converter</a>
+          <a href="/pressure/"    class="sidebar-link"         data-category="pressure">    <span class="link-icon">🔵</span> Pressure Converter</a>
+          <a href="/energy/"      class="sidebar-link"         data-category="energy">      <span class="link-icon">⚡</span> Energy Converter</a>
+        </nav>
+      </div>
+
+      <!-- Sidebar Ad -->
+      <div aria-label="Advertisement">
+        <!-- Google AdSense 300x250 Rectangle -->
+        <!--
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="1122334455"
+             data-ad-format="auto"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        -->
+        <div class="ad-placeholder sidebar" aria-hidden="true">
+          Advertisement<br>300×250<br>Google AdSense
+        </div>
+      </div>
+
+      <!-- Popular Conversions -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-header">Popular Conversions</div>
+        <div class="popular-grid">
+          <div class="popular-item" data-cat="length"      data-from="meter"      data-to="foot"        title="Meters to Feet">m → ft</div>
+          <div class="popular-item" data-cat="length"      data-from="kilometer"  data-to="mile"        title="Kilometers to Miles">km → mi</div>
+          <div class="popular-item" data-cat="temperature" data-from="celsius"    data-to="fahrenheit"  title="Celsius to Fahrenheit">°C → °F</div>
+          <div class="popular-item" data-cat="temperature" data-from="fahrenheit" data-to="celsius"     title="Fahrenheit to Celsius">°F → °C</div>
+          <div class="popular-item" data-cat="weight"      data-from="kilogram"   data-to="pound"       title="Kilograms to Pounds">kg → lb</div>
+          <div class="popular-item" data-cat="weight"      data-from="pound"      data-to="kilogram"    title="Pounds to Kilograms">lb → kg</div>
+          <div class="popular-item" data-cat="volume"      data-from="liter"      data-to="usgallon"    title="Liters to Gallons">L → gal</div>
+          <div class="popular-item" data-cat="speed"       data-from="kph"        data-to="mph"         title="km/h to mph">km/h → mph</div>
+          <div class="popular-item" data-cat="area"        data-from="sqmeter"    data-to="sqfoot"      title="m² to ft²">m² → ft²</div>
+          <div class="popular-item" data-cat="energy"      data-from="joule"      data-to="calorie"     title="Joules to Calories">J → cal</div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div><!-- /page-wrapper -->
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="site-logo">Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span></div>
+        <p>Free, fast, and accurate unit conversion for everyone. Supporting all major measurement systems worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Converters</h4>
+        <ul>
+          <li><a href="/length/">Length</a></li>
+          <li><a href="/temperature/">Temperature</a></li>
+          <li><a href="/area/">Area</a></li>
+          <li><a href="/volume/">Volume</a></li>
+          <li><a href="/weight/">Weight</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More</h4>
+        <ul>
+          <li><a href="/time/">Time</a></li>
+          <li><a href="/speed/">Speed</a></li>
+          <li><a href="/pressure/">Pressure</a></li>
+          <li><a href="/energy/">Energy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/sitemap.xml">Sitemap</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 UnitConvert.net — All rights reserved.</span>
+      <span>
+        <a href="/privacy.html">Privacy</a> ·
+        <a href="/sitemap.xml">Sitemap</a> ·
+        <a href="/ads.txt">ads.txt</a>
+      </span>
+    </div>
+  </footer>
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="js/converters.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
