@@ -106,7 +106,7 @@ img {
 .site-logo .logo-tld {
   font-weight: 400;
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--white);
 }
 
 .header-tagline {

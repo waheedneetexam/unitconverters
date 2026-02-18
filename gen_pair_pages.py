@@ -433,7 +433,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
     title = f"Convert {fname} to {tname} | {fname} to {tname} Converter"
     desc  = f"Easily convert {fname} ({fsym}) to {tname} ({tsym}). Free online {cat_name.lower()} converter with formula, examples, and conversion table."
     kw    = f"{fname} to {tname}, {fsym} to {tsym}, convert {fname} to {tname}, {cat_name.lower()} converter, {fname} {tname} conversion"
-    canonical = f"https://www.unitconvert.net/{cat_key}/{page_slug}/"
+    canonical = f"https://www.swapunits.online/{cat_key}/{page_slug}/"
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -472,8 +472,8 @@ def make_page(cat_key, cat, from_unit, to_unit):
 
   <header class="site-header" role="banner">
     <div class="header-inner">
-      <a href="/" class="site-logo" aria-label="UnitConvert.net Home">
-        Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span>
+      <a href="/" class="site-logo" aria-label="SwapUnits.online Home">
+        Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span>
       </a>
       <span class="header-tagline">Free Online Unit Converter</span>
     </div>
@@ -593,7 +593,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
   <footer class="site-footer" role="contentinfo">
     <div class="footer-top" style="max-width:1200px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:40px;">
       <div class="footer-brand">
-        <div class="site-logo">Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span></div>
+        <div class="site-logo">Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span></div>
         <p style="color:rgba(255,255,255,0.6);margin-top:12px;font-size:0.9rem;line-height:1.6;">Free, fast, and accurate unit conversion for everyone. Supporting all major measurement systems worldwide.</p>
       </div>
       <div class="footer-col">
@@ -626,7 +626,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
       </div>
     </div>
     <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:20px;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
-      <span>&copy; 2026 UnitConvert.net &mdash; All rights reserved.</span>
+      <span>&copy; 2026 SwapUnits.online &mdash; All rights reserved.</span>
       <span><a href="/privacy.html" style="color:inherit;">Privacy</a> &middot; <a href="/sitemap.xml" style="color:inherit;">Sitemap</a></span>
     </div>
   </footer>

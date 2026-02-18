@@ -358,7 +358,7 @@ def make_state_page(state):
 
     title = f"{name} Land Unit Converter | Bigha, Katha, Acre & More"
     desc_meta = f"Convert land units in {name}: Bigha, Katha, Acre, Square Feet and more. Free online {name} land measurement converter with conversion table."
-    canonical = f"https://www.unitconvert.net/land/{slug}-land-conversion/"
+    canonical = f"https://www.swapunits.online/land/{slug}-land-conversion/"
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -395,8 +395,8 @@ def make_state_page(state):
 
   <header class="site-header" role="banner">
     <div class="header-inner">
-      <a href="/" class="site-logo" aria-label="UnitConvert.net Home">
-        Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span>
+      <a href="/" class="site-logo" aria-label="SwapUnits.online Home">
+        Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span>
       </a>
       <span class="header-tagline">Free Online Unit Converter</span>
     </div>
@@ -520,7 +520,7 @@ def make_state_page(state):
   <footer class="site-footer" role="contentinfo">
     <div class="footer-top" style="max-width:1200px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:40px;">
       <div class="footer-brand">
-        <div class="site-logo">Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span></div>
+        <div class="site-logo">Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span></div>
         <p style="color:rgba(255,255,255,0.6);margin-top:12px;font-size:0.9rem;line-height:1.6;">Free, fast, and accurate unit conversion for everyone. Supporting all major measurement systems worldwide.</p>
       </div>
       <div class="footer-col">
@@ -553,7 +553,7 @@ def make_state_page(state):
       </div>
     </div>
     <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:20px;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
-      <span>&copy; 2026 UnitConvert.net &mdash; All rights reserved.</span>
+      <span>&copy; 2026 SwapUnits.online &mdash; All rights reserved.</span>
       <span><a href="/privacy.html" style="color:inherit;">Privacy</a> &middot; <a href="/sitemap.xml" style="color:inherit;">Sitemap</a></span>
     </div>
   </footer>
@@ -666,7 +666,7 @@ def make_hub_page():
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Indian Land Unit Converter | Bigha, Katha, Acre by State | UnitConvert.net</title>
+  <title>Indian Land Unit Converter | Bigha, Katha, Acre by State | SwapUnits.online</title>
   <meta name="description" content="Free Indian land unit converter for all states. Convert Bigha, Katha, Biswa, Kanal, Marla, Ground, Cent, Guntha and more. State-specific converters for UP, Bihar, Punjab, West Bengal, Rajasthan, MP, Gujarat, Maharashtra, Tamil Nadu, Himachal Pradesh." />
   <meta name="keywords" content="indian land converter, bigha to sq ft, katha to sq ft, land measurement india, bigha calculator, kanal marla converter" />
   <meta name="robots" content="index, follow" />
@@ -684,8 +684,8 @@ def make_hub_page():
 
   <header class="site-header" role="banner">
     <div class="header-inner">
-      <a href="/" class="site-logo" aria-label="UnitConvert.net Home">
-        Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span>
+      <a href="/" class="site-logo" aria-label="SwapUnits.online Home">
+        Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span>
       </a>
       <span class="header-tagline">Free Online Unit Converter</span>
     </div>
@@ -774,7 +774,7 @@ def make_hub_page():
 
   <footer class="site-footer" role="contentinfo">
     <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:16px 20px;display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
-      <span>&copy; 2026 UnitConvert.net &mdash; All rights reserved.</span>
+      <span>&copy; 2026 SwapUnits.online &mdash; All rights reserved.</span>
       <span><a href="/privacy.html">Privacy</a> &middot; <a href="/sitemap.xml">Sitemap</a></span>
     </div>
   </footer>
@@ -794,7 +794,7 @@ with open(hub_path, "w", encoding="utf-8") as f:
 print("Generated: land/index.html")
 
 # State pages
-sitemap_entries = ["https://www.unitconvert.net/land/"]
+sitemap_entries = ["https://www.swapunits.online/land/"]
 for state in STATES:
     page_slug = f"{state['slug']}-land-conversion"
     page_dir  = os.path.join(LAND_DIR, page_slug)
@@ -803,7 +803,7 @@ for state in STATES:
     out_path = os.path.join(page_dir, "index.html")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
-    sitemap_entries.append(f"https://www.unitconvert.net/land/{page_slug}/")
+    sitemap_entries.append(f"https://www.swapunits.online/land/{page_slug}/")
     print(f"Generated: land/{page_slug}/index.html")
 
 print(f"\nTotal land pages: {len(sitemap_entries)}")

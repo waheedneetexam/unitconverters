@@ -79,26 +79,26 @@ def get_template(cat_key, cat_data):
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page-title">{name} Converter &mdash; Free Online {name} Unit Conversion | UnitConvert.net</title>
+  <title id="page-title">{name} Converter &mdash; Free Online {name} Unit Conversion | SwapUnits.online</title>
   <meta name="description" content="{desc} Free, fast, and accurate." />
   <meta name="keywords" content="{kw}" />
-  <meta name="author" content="UnitConvert.net" />
+  <meta name="author" content="SwapUnits.online" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://www.unitconvert.net/{cat_key}/" />
+  <link rel="canonical" href="https://www.swapunits.online/{cat_key}/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="{name} Converter &mdash; Free Online Tool | UnitConvert.net" />
+  <meta property="og:title" content="{name} Converter &mdash; Free Online Tool | SwapUnits.online" />
   <meta property="og:description" content="{desc}" />
-  <meta property="og:url" content="https://www.unitconvert.net/{cat_key}/" />
-  <meta property="og:site_name" content="UnitConvert.net" />
+  <meta property="og:url" content="https://www.swapunits.online/{cat_key}/" />
+  <meta property="og:site_name" content="SwapUnits.online" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="{name} Converter &mdash; UnitConvert.net" />
+  <meta name="twitter:title" content="{name} Converter &mdash; SwapUnits.online" />
   <meta name="twitter:description" content="{desc}" />
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "UnitConvert.net &mdash; {name} Converter",
-    "url": "https://www.unitconvert.net/{cat_key}/",
+    "name": "SwapUnits.online &mdash; {name} Converter",
+    "url": "https://www.swapunits.online/{cat_key}/",
     "description": "{desc}",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -114,8 +114,8 @@ def get_template(cat_key, cat_data):
 
   <header class="site-header" role="banner">
     <div class="header-inner">
-      <a href="/" class="site-logo" aria-label="UnitConvert.net Home">
-        Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span>
+      <a href="/" class="site-logo" aria-label="SwapUnits.online Home">
+        Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span>
       </a>
       <span class="header-tagline">Free Online Unit Converter</span>
     </div>
@@ -220,7 +220,7 @@ def get_template(cat_key, cat_data):
   <footer class="site-footer" role="contentinfo">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="site-logo">Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span></div>
+        <div class="site-logo">Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span></div>
         <p>Free, fast, and accurate unit conversion for everyone. Supporting all major measurement systems worldwide.</p>
       </div>
       <div class="footer-col">
@@ -254,7 +254,7 @@ def get_template(cat_key, cat_data):
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2026 UnitConvert.net &mdash; All rights reserved.</span>
+      <span>&copy; 2026 SwapUnits.online &mdash; All rights reserved.</span>
       <span><a href="/privacy.html">Privacy</a> &middot; <a href="/sitemap.xml">Sitemap</a></span>
     </div>
   </footer>
