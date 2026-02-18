@@ -411,9 +411,10 @@ def make_page(cat_key, cat, from_unit, to_unit):
     # Nav links
     nav_links = ""
     nav_cats = [
-        ("length","Length"), ("temperature","Temperature"), ("area","Area"),
-        ("volume","Volume"), ("weight","Weight"), ("time","Time"),
-        ("speed","Speed"), ("pressure","Pressure"), ("energy","Energy"),
+        ("length","📏 Length"), ("temperature","🌡️ Temperature"), ("area","⬛ Area"),
+        ("volume","🧊 Volume"), ("weight","⚖️ Weight"), ("time","⏱️ Time"),
+        ("speed","🚀 Speed"), ("pressure","🔵 Pressure"), ("energy","⚡ Energy"),
+        ("land","🌾 Land"),
     ]
     for nk, nn in nav_cats:
         active = ' class="nav-link active"' if nk == cat_key else ' class="nav-link"'
@@ -505,8 +506,8 @@ def make_page(cat_key, cat, from_unit, to_unit):
               <input type="number" id="pair-from" value="1" placeholder="Enter value" autocomplete="off" />
               <span class="pair-unit-label">{fname} ({fsym})</span>
             </div>
-            <div class="pair-swap-row">
-              <button class="pair-swap-btn" id="pair-swap" title="Swap" aria-label="Swap units">&#x21C5;</button>
+            <div class="pair-swap-row" style="display:flex; justify-content:center; margin: 8px 0;">
+              <button class="swap-btn" id="pair-swap" title="Swap" aria-label="Swap units">⇄</button>
             </div>
             <div class="pair-row">
               <label>To:</label>
@@ -574,9 +575,43 @@ def make_page(cat_key, cat, from_unit, to_unit):
   </div>
 
   <footer class="site-footer" role="contentinfo">
-    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:16px 20px;display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
+    <div class="footer-top" style="max-width:1200px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:40px;">
+      <div class="footer-brand">
+        <div class="site-logo">Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span></div>
+        <p style="color:rgba(255,255,255,0.6);margin-top:12px;font-size:0.9rem;line-height:1.6;">Free, fast, and accurate unit conversion for everyone. Supporting all major measurement systems worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">Converters</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/length/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Length</a></li>
+          <li><a href="/temperature/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Temperature</a></li>
+          <li><a href="/area/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Area</a></li>
+          <li><a href="/volume/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Volume</a></li>
+          <li><a href="/weight/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Weight</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">More</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/time/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Time</a></li>
+          <li><a href="/speed/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Speed</a></li>
+          <li><a href="/pressure/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Pressure</a></li>
+          <li><a href="/energy/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Energy</a></li>
+          <li><a href="/land/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Land</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">Info</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/about.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">About</a></li>
+          <li><a href="/privacy.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">Privacy Policy</a></li>
+          <li><a href="/sitemap.xml" style="color:rgba(255,255,255,0.6);text-decoration:none;">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:20px;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
       <span>&copy; 2026 UnitConvert.net &mdash; All rights reserved.</span>
-      <span><a href="/privacy.html">Privacy</a> &middot; <a href="/sitemap.xml">Sitemap</a></span>
+      <span><a href="/privacy.html" style="color:inherit;">Privacy</a> &middot; <a href="/sitemap.xml" style="color:inherit;">Sitemap</a></span>
     </div>
   </footer>
 

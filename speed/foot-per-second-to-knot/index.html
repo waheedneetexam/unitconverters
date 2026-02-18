@@ -47,15 +47,16 @@
 
   <nav class="site-nav" role="navigation" aria-label="Converter categories">
     <div class="nav-inner">
-      <a href="../../length/" class="nav-link">Length</a>
-      <a href="../../temperature/" class="nav-link">Temperature</a>
-      <a href="../../area/" class="nav-link">Area</a>
-      <a href="../../volume/" class="nav-link">Volume</a>
-      <a href="../../weight/" class="nav-link">Weight</a>
-      <a href="../../time/" class="nav-link">Time</a>
-      <a href="../../speed/" class="nav-link active">Speed</a>
-      <a href="../../pressure/" class="nav-link">Pressure</a>
-      <a href="../../energy/" class="nav-link">Energy</a>
+      <a href="../../length/" class="nav-link">📏 Length</a>
+      <a href="../../temperature/" class="nav-link">🌡️ Temperature</a>
+      <a href="../../area/" class="nav-link">⬛ Area</a>
+      <a href="../../volume/" class="nav-link">🧊 Volume</a>
+      <a href="../../weight/" class="nav-link">⚖️ Weight</a>
+      <a href="../../time/" class="nav-link">⏱️ Time</a>
+      <a href="../../speed/" class="nav-link active">🚀 Speed</a>
+      <a href="../../pressure/" class="nav-link">🔵 Pressure</a>
+      <a href="../../energy/" class="nav-link">⚡ Energy</a>
+      <a href="../../land/" class="nav-link">🌾 Land</a>
       
     </div>
   </nav>
@@ -82,8 +83,8 @@
               <input type="number" id="pair-from" value="1" placeholder="Enter value" autocomplete="off" />
               <span class="pair-unit-label">Foot per Second (ft/s)</span>
             </div>
-            <div class="pair-swap-row">
-              <button class="pair-swap-btn" id="pair-swap" title="Swap" aria-label="Swap units">&#x21C5;</button>
+            <div class="pair-swap-row" style="display:flex; justify-content:center; margin: 8px 0;">
+              <button class="swap-btn" id="pair-swap" title="Swap" aria-label="Swap units">⇄</button>
             </div>
             <div class="pair-row">
               <label>To:</label>
@@ -190,15 +191,16 @@
       <div class="sidebar-card">
         <div class="sidebar-card-header">All Converters</div>
         <nav class="sidebar-links" aria-label="All converter categories">
-          <a href="../../length/" class="sidebar-link">Length Converter</a>
-          <a href="../../temperature/" class="sidebar-link">Temperature Converter</a>
-          <a href="../../area/" class="sidebar-link">Area Converter</a>
-          <a href="../../volume/" class="sidebar-link">Volume Converter</a>
-          <a href="../../weight/" class="sidebar-link">Weight Converter</a>
-          <a href="../../time/" class="sidebar-link">Time Converter</a>
-          <a href="../../speed/" class="sidebar-link active">Speed Converter</a>
-          <a href="../../pressure/" class="sidebar-link">Pressure Converter</a>
-          <a href="../../energy/" class="sidebar-link">Energy Converter</a>
+          <a href="../../length/" class="sidebar-link">📏 Length Converter</a>
+          <a href="../../temperature/" class="sidebar-link">🌡️ Temperature Converter</a>
+          <a href="../../area/" class="sidebar-link">⬛ Area Converter</a>
+          <a href="../../volume/" class="sidebar-link">🧊 Volume Converter</a>
+          <a href="../../weight/" class="sidebar-link">⚖️ Weight Converter</a>
+          <a href="../../time/" class="sidebar-link">⏱️ Time Converter</a>
+          <a href="../../speed/" class="sidebar-link active">🚀 Speed Converter</a>
+          <a href="../../pressure/" class="sidebar-link">🔵 Pressure Converter</a>
+          <a href="../../energy/" class="sidebar-link">⚡ Energy Converter</a>
+          <a href="../../land/" class="sidebar-link">🌾 Land Converter</a>
           
         </nav>
       </div>
@@ -209,9 +211,43 @@
   </div>
 
   <footer class="site-footer" role="contentinfo">
-    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:16px 20px;display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
+    <div class="footer-top" style="max-width:1200px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:40px;">
+      <div class="footer-brand">
+        <div class="site-logo">Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span></div>
+        <p style="color:rgba(255,255,255,0.6);margin-top:12px;font-size:0.9rem;line-height:1.6;">Free, fast, and accurate unit conversion for everyone. Supporting all major measurement systems worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">Converters</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/length/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Length</a></li>
+          <li><a href="/temperature/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Temperature</a></li>
+          <li><a href="/area/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Area</a></li>
+          <li><a href="/volume/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Volume</a></li>
+          <li><a href="/weight/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Weight</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">More</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/time/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Time</a></li>
+          <li><a href="/speed/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Speed</a></li>
+          <li><a href="/pressure/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Pressure</a></li>
+          <li><a href="/energy/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Energy</a></li>
+          <li><a href="/land/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Land</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">Info</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/about.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">About</a></li>
+          <li><a href="/privacy.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">Privacy Policy</a></li>
+          <li><a href="/sitemap.xml" style="color:rgba(255,255,255,0.6);text-decoration:none;">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:20px;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
       <span>&copy; 2026 UnitConvert.net &mdash; All rights reserved.</span>
-      <span><a href="/privacy.html">Privacy</a> &middot; <a href="/sitemap.xml">Sitemap</a></span>
+      <span><a href="/privacy.html" style="color:inherit;">Privacy</a> &middot; <a href="/sitemap.xml" style="color:inherit;">Sitemap</a></span>
     </div>
   </footer>
 

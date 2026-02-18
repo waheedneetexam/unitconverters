@@ -51,7 +51,7 @@
             ${cat.units.map(u => `<option value="${u.id}"${u.id === defaultFrom ? ' selected' : ''}>${u.label}</option>`).join('')}
           </select>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:24px;">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
           <button class="swap-btn" id="swap-btn" title="Swap units" aria-label="Swap from and to units">⇄</button>
         </div>
         <div class="converter-field">
