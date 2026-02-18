@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Madhya Pradesh (MP) Land Unit Converter | Bigha, Katha, Acre & More</title>
+  <meta name="description" content="Convert land units in Madhya Pradesh (MP): Bigha, Katha, Acre, Square Feet and more. Free online Madhya Pradesh (MP) land measurement converter with conversion table." />
+  <meta name="keywords" content="Madhya Pradesh (MP) land converter, Madhya Pradesh (MP) bigha to sq ft, land measurement MP, bigha katha acre converter india" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.unitconvert.net/land/madhya-pradesh-land-conversion/" />
+  <meta property="og:title" content="Madhya Pradesh (MP) Land Unit Converter" />
+  <meta property="og:description" content="Convert land units in Madhya Pradesh (MP): Bigha, Katha, Acre, Square Feet and more. Free online Madhya Pradesh (MP) land measurement converter with conversion table." />
+  <meta property="og:url" content="https://www.unitconvert.net/land/madhya-pradesh-land-conversion/" />
+  <meta property="og:type" content="website" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Madhya Pradesh (MP) Land Unit Converter",
+    "url": "https://www.unitconvert.net/land/madhya-pradesh-land-conversion/",
+    "description": "Convert land units in Madhya Pradesh (MP): Bigha, Katha, Acre, Square Feet and more. Free online Madhya Pradesh (MP) land measurement converter with conversion table.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+  }
+  </script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+  <link rel="stylesheet" href="../../css/style.css" />
+</head>
+<body data-category="land">
+
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="/" class="site-logo" aria-label="UnitConvert.net Home">
+        Unit<span class="logo-accent">Convert</span><span class="logo-tld">.net</span>
+      </a>
+      <span class="header-tagline">Free Online Unit Converter</span>
+    </div>
+  </header>
+
+  <div class="ad-header" aria-label="Advertisement">
+    <div class="ad-placeholder banner" aria-hidden="true">Advertisement &mdash; 728&times;90 Leaderboard</div>
+  </div>
+
+  <nav class="site-nav" role="navigation" aria-label="Converter categories">
+    <div class="nav-inner">
+      <a href="../../length/" class="nav-link">Length</a>
+      <a href="../../temperature/" class="nav-link">Temperature</a>
+      <a href="../../area/" class="nav-link">Area</a>
+      <a href="../../volume/" class="nav-link">Volume</a>
+      <a href="../../weight/" class="nav-link">Weight</a>
+      <a href="../../time/" class="nav-link">Time</a>
+      <a href="../../speed/" class="nav-link">Speed</a>
+      <a href="../../pressure/" class="nav-link">Pressure</a>
+      <a href="../../energy/" class="nav-link">Energy</a>
+      <a href="../../land/" class="nav-link active">🌾 Land</a>
+      
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <main class="main-content" role="main">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>&rsaquo;</span>
+        <a href="../../land/">Indian Land Units</a> <span>&rsaquo;</span>
+        <span>Madhya Pradesh (MP)</span>
+      </nav>
+
+      <!-- Converter Card -->
+      <article class="converter-card pair-page-card">
+        <div class="converter-card-header">
+          <h1>🌾 Madhya Pradesh (MP) Land Unit Converter</h1>
+        </div>
+        <div class="pair-page-body">
+          <p class="pair-intro">MP uses a smaller Bigha compared to UP, along with Katha for subdivisions.</p>
+
+          <div class="converter-grid">
+            <div class="converter-field">
+              <label for="land-from-val">From</label>
+              <input type="number" id="land-from-val" value="1" placeholder="Enter value" autocomplete="off" />
+              <select id="land-from-unit" size="8">
+                <option value="sqft">Square Feet (sq ft)</option>
+<option value="sqmeter">Square Meter (sq m)</option>
+<option value="acre">Acre (Acre)</option>
+<option value="bigha">Bigha (Bigha)</option>
+<option value="katha">Katha (Katha)</option>
+<option value="hectare">Hectare (ha)</option>
+              </select>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:24px;">
+              <button class="swap-btn" id="land-swap-btn" title="Swap units">⇄</button>
+            </div>
+            <div class="converter-field">
+              <label for="land-to-val">To</label>
+              <input type="text" id="land-to-val" placeholder="Result" readonly tabindex="-1" />
+              <select id="land-to-unit" size="8">
+                <option value="sqft">Square Feet (sq ft)</option>
+<option value="sqmeter">Square Meter (sq m)</option>
+<option value="acre">Acre (Acre)</option>
+<option value="bigha">Bigha (Bigha)</option>
+<option value="katha">Katha (Katha)</option>
+<option value="hectare">Hectare (ha)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="land-btn-row" style="margin-top: 20px;">
+            <button class="pair-convert-btn" id="land-convert-btn">Convert</button>
+            <button class="pair-clear-btn" id="land-clear-btn">Clear</button>
+          </div>
+
+          <!-- Result display -->
+          <div class="land-result-display" id="land-result-display" style="display:none;">
+            <div class="land-result-label" id="land-result-label"></div>
+            <div class="land-result-value" id="land-result-value"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Unit Reference -->
+      <section class="pair-info-card">
+        <h2>Madhya Pradesh (MP) Land Units Reference</h2>
+        <ul class="land-unit-list">
+          <li><strong>1 Square Feet (sq ft)</strong> = 1 sq ft</li>
+<li><strong>1 Square Meter (sq m)</strong> = 10.7639 sq ft</li>
+<li><strong>1 Acre (Acre)</strong> = 43,560 sq ft</li>
+<li><strong>1 Bigha (Bigha)</strong> = 12,000 sq ft — <em>MP Bigha (smaller than UP)</em></li>
+<li><strong>1 Katha (Katha)</strong> = 600 sq ft — <em>1/20 of Bigha</em></li>
+<li><strong>1 Hectare (ha)</strong> = 107,639 sq ft</li>
+
+        </ul>
+      </section>
+
+      <!-- Conversion Table -->
+      <section class="pair-table-card">
+        <h2>Madhya Pradesh (MP) Land Unit Conversion Table</h2>
+        <table class="pair-table">
+          <thead>
+            <tr><th>Unit</th><th>Equivalent</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+            <td>1 Square Meter (sq m)</td>
+            <td>= 10.7639 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 0.0929031 Square Meter (sq m)</td>
+          </tr><tr>
+            <td>1 Acre (Acre)</td>
+            <td>= 43,560 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 2.29568e-05 Acre (Acre)</td>
+          </tr><tr>
+            <td>1 Bigha (Bigha)</td>
+            <td>= 12,000 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 8.33333e-05 Bigha (Bigha)</td>
+          </tr><tr>
+            <td>1 Katha (Katha)</td>
+            <td>= 600 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 0.00166667 Katha (Katha)</td>
+          </tr><tr>
+            <td>1 Hectare (ha)</td>
+            <td>= 107,639 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 9.29031e-06 Hectare (ha)</td>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Related States -->
+      <section class="pair-related-card">
+        <h2>Other Indian State Land Converters</h2>
+        <ul class="pair-related-list">
+          <li><a href="../uttar-pradesh-land-conversion/">Uttar Pradesh (UP)</a></li>
+<li><a href="../punjab-haryana-land-conversion/">Punjab & Haryana</a></li>
+<li><a href="../bihar-land-conversion/">Bihar</a></li>
+<li><a href="../west-bengal-land-conversion/">West Bengal</a></li>
+<li><a href="../rajasthan-land-conversion/">Rajasthan</a></li>
+<li><a href="../gujarat-land-conversion/">Gujarat</a></li>
+<li><a href="../maharashtra-land-conversion/">Maharashtra</a></li>
+<li><a href="../tamil-nadu-land-conversion/">Tamil Nadu</a></li>
+<li><a href="../himachal-uttarakhand-land-conversion/">Himachal Pradesh & Uttarakhand</a></li>
+
+        </ul>
+      </section>
+
+    </main>
+
+    <aside class="sidebar" role="complementary" aria-label="All converters">
+      <div class="sidebar-card">
+        <div class="sidebar-card-header">All Converters</div>
+        <nav class="sidebar-links" aria-label="All converter categories">
+          <a href="../../length/" class="sidebar-link">Length Converter</a>
+          <a href="../../temperature/" class="sidebar-link">Temperature Converter</a>
+          <a href="../../area/" class="sidebar-link">Area Converter</a>
+          <a href="../../volume/" class="sidebar-link">Volume Converter</a>
+          <a href="../../weight/" class="sidebar-link">Weight Converter</a>
+          <a href="../../time/" class="sidebar-link">Time Converter</a>
+          <a href="../../speed/" class="sidebar-link">Speed Converter</a>
+          <a href="../../pressure/" class="sidebar-link">Pressure Converter</a>
+          <a href="../../energy/" class="sidebar-link">Energy Converter</a>
+          <a href="../../land/" class="sidebar-link active">🌾 Indian Land Units</a>
+          
+        </nav>
+      </div>
+      <div aria-label="Advertisement">
+        <div class="ad-placeholder sidebar" aria-hidden="true">Advertisement<br>300&times;250<br>Google AdSense</div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:16px 20px;display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
+      <span>&copy; 2026 UnitConvert.net &mdash; All rights reserved.</span>
+      <span><a href="/privacy.html">Privacy</a> &middot; <a href="/sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    var UNITS = {
+      "sqft": { label: "Square Feet", sym: "sq ft", sqft: 1, note: "" },
+      "sqmeter": { label: "Square Meter", sym: "sq m", sqft: 10.7639, note: "" },
+      "acre": { label: "Acre", sym: "Acre", sqft: 43560, note: "" },
+      "bigha": { label: "Bigha", sym: "Bigha", sqft: 12000, note: "MP Bigha (smaller than UP)" },
+      "katha": { label: "Katha", sym: "Katha", sqft: 600, note: "1/20 of Bigha" },
+      "hectare": { label: "Hectare", sym: "ha", sqft: 107639, note: "" },
+    };
+
+    var fromVal  = document.getElementById('land-from-val');
+    var fromUnit = document.getElementById('land-from-unit');
+    var toVal    = document.getElementById('land-to-val');
+    var toUnit   = document.getElementById('land-to-unit');
+    var convBtn  = document.getElementById('land-convert-btn');
+    var swapBtn  = document.getElementById('land-swap-btn');
+    var clearBtn = document.getElementById('land-clear-btn');
+    var resultDisplay = document.getElementById('land-result-display');
+    var resultLabel   = document.getElementById('land-result-label');
+    var resultValue   = document.getElementById('land-result-value');
+
+    // Default: from sqft, to bigha (or second unit)
+    var keys = Object.keys(UNITS);
+    fromUnit.value = keys[0];
+    toUnit.value   = keys[1] || keys[0];
+
+    function formatNum(n) {
+      if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
+      var rounded = parseFloat(n.toPrecision(10));
+      var abs = Math.abs(rounded);
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(10, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      if (abs >= 1) {
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toLocaleString('en-IN');
+        // Max 6 decimals for non-integers >= 1
+        var dec = Math.max(0, Math.min(6, 9 - Math.floor(Math.log10(abs))));
+        return parseFloat(rounded.toFixed(dec)).toLocaleString('en-IN', { maximumFractionDigits: 6 });
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toFixed(6)).toString();
+    }
+
+    function doConvert() {
+      var val = parseFloat(String(fromVal.value).replace(/,/g, ''));
+      if (isNaN(val)) { toVal.value = ''; resultDisplay.style.display = 'none'; return; }
+      var from = fromUnit.value;
+      var to   = toUnit.value;
+      var fromSqft = UNITS[from].sqft;
+      var toSqft   = UNITS[to].sqft;
+      var result = val * fromSqft / toSqft;
+      var formatted = formatNum(result);
+      toVal.value = formatted;
+      // Update result display
+      resultLabel.textContent = val.toLocaleString('en-IN') + ' ' + UNITS[from].label + ' (' + UNITS[from].sym + ') =';
+      resultValue.textContent = formatted + ' ' + UNITS[to].label + ' (' + UNITS[to].sym + ')';
+      resultDisplay.style.display = 'flex';
+    }
+
+    fromVal.addEventListener('input', doConvert);
+    fromUnit.addEventListener('change', doConvert);
+    toUnit.addEventListener('change', doConvert);
+    convBtn.addEventListener('click', doConvert);
+    clearBtn.addEventListener('click', function() {
+      fromVal.value = '';
+      toVal.value = '';
+      resultDisplay.style.display = 'none';
+    });
+    swapBtn.addEventListener('click', function() {
+      var tmp = fromUnit.value;
+      fromUnit.value = toUnit.value;
+      toUnit.value = tmp;
+      doConvert();
+    });
+
+    doConvert();
+  })();
+  </script>
+
+</body>
+</html>

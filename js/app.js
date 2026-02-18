@@ -56,7 +56,7 @@
         </div>
         <div class="converter-field">
           <label for="to-value">To</label>
-          <input type="number" id="to-value" placeholder="Result" readonly tabindex="-1" />
+          <input type="text" id="to-value" placeholder="Result" readonly tabindex="-1" />
           <select id="to-unit" size="8" aria-label="To unit">
             ${cat.units.map(u => `<option value="${u.id}"${u.id === defaultTo ? ' selected' : ''}>${u.label}</option>`).join('')}
           </select>
