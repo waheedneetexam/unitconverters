@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Joule to Electronvolt</h2>
-        <p>1 Joule (J) = 6.242197253e+18 Electronvolt (eV)</p>
-        <p>1 Electronvolt (eV) = 1.602e-19 Joule (J)</p>
+        <p>1 Joule (J) = 6,242,197,252,999,999,488 Electronvolt (eV)</p>
+        <p>1 Electronvolt (eV) = 0.00000000000000000016 Joule (J)</p>
         <p><strong>Example:</strong> convert 15 Joule (J) to Electronvolt (eV):<br>
-        15 Joule (J) = 15 &times; 6.242197253e+18 Electronvolt (eV) = 9.36329588e+19 Electronvolt (eV)</p>
+        15 Joule (J) = 15 &times; 6,242,197,252,999,999,488 Electronvolt (eV) = 93,632,958,799,999,991,808 Electronvolt (eV)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Joule [J]</th><th>Electronvolt [eV]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 J</td><td>6.242197253e+18 eV</td></tr>
-<tr><td>2 J</td><td>1.248439451e+19 eV</td></tr>
-<tr><td>5 J</td><td>3.121098627e+19 eV</td></tr>
-<tr><td>10 J</td><td>6.242197253e+19 eV</td></tr>
-<tr><td>20 J</td><td>1.248439451e+20 eV</td></tr>
-<tr><td>50 J</td><td>3.121098627e+20 eV</td></tr>
-<tr><td>100 J</td><td>6.242197253e+20 eV</td></tr>
-<tr><td>200 J</td><td>1.248439451e+21 eV</td></tr>
-<tr><td>500 J</td><td>3.121098627e+21 eV</td></tr>
-<tr><td>1000 J</td><td>6.242197253e+21 eV</td></tr>
+            <tr><td>1 J</td><td>6,242,197,252,999,999,488 eV</td></tr>
+<tr><td>2 J</td><td>12,484,394,510,000,001,024 eV</td></tr>
+<tr><td>5 J</td><td>31,210,986,270,000,001,024 eV</td></tr>
+<tr><td>10 J</td><td>62,421,972,530,000,003,072 eV</td></tr>
+<tr><td>20 J</td><td>124,843,945,100,000,002,048 eV</td></tr>
+<tr><td>50 J</td><td>312,109,862,700,000,018,432 eV</td></tr>
+<tr><td>100 J</td><td>624,219,725,299,999,965,184 eV</td></tr>
+<tr><td>200 J</td><td>1,248,439,450,999,999,954,944 eV</td></tr>
+<tr><td>500 J</td><td>3,121,098,627,000,000,053,248 eV</td></tr>
+<tr><td>1000 J</td><td>6,242,197,253,000,000,438,272 eV</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

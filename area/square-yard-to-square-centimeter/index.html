@@ -104,7 +104,7 @@
         <p>1 Square Yard (yd²) = 8,361.27 Square Centimeter (cm²)</p>
         <p>1 Square Centimeter (cm²) = 0.0001195990561 Square Yard (yd²)</p>
         <p><strong>Example:</strong> convert 15 Square Yard (yd²) to Square Centimeter (cm²):<br>
-        15 Square Yard (yd²) = 15 &times; 8,361.27 Square Centimeter (cm²) = 125,419 Square Centimeter (cm²)</p>
+        15 Square Yard (yd²) = 15 &times; 8,361.27 Square Centimeter (cm²) = 125,419.05 Square Centimeter (cm²)</p>
       </section>
 
       <!-- Definition -->
@@ -122,15 +122,15 @@
           </thead>
           <tbody>
             <tr><td>1 yd²</td><td>8,361.27 cm²</td></tr>
-<tr><td>2 yd²</td><td>16,722.5 cm²</td></tr>
-<tr><td>5 yd²</td><td>41,806.3 cm²</td></tr>
+<tr><td>2 yd²</td><td>16,722.54 cm²</td></tr>
+<tr><td>5 yd²</td><td>41,806.35 cm²</td></tr>
 <tr><td>10 yd²</td><td>83,612.7 cm²</td></tr>
-<tr><td>20 yd²</td><td>167,225 cm²</td></tr>
-<tr><td>50 yd²</td><td>418,063 cm²</td></tr>
+<tr><td>20 yd²</td><td>167,225.4 cm²</td></tr>
+<tr><td>50 yd²</td><td>418,063.5 cm²</td></tr>
 <tr><td>100 yd²</td><td>836,127 cm²</td></tr>
-<tr><td>200 yd²</td><td>1.67225e+06 cm²</td></tr>
-<tr><td>500 yd²</td><td>4.18063e+06 cm²</td></tr>
-<tr><td>1000 yd²</td><td>8.36127e+06 cm²</td></tr>
+<tr><td>200 yd²</td><td>1,672,254 cm²</td></tr>
+<tr><td>500 yd²</td><td>4,180,635 cm²</td></tr>
+<tr><td>1000 yd²</td><td>8,361,270 cm²</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

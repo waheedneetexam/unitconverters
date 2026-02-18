@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Chain to Nanometer</h2>
-        <p>1 Chain (ch) = 2.01168e+10 Nanometer (nm)</p>
-        <p>1 Nanometer (nm) = 4.970969538e-11 Chain (ch)</p>
+        <p>1 Chain (ch) = 20,116,800,000 Nanometer (nm)</p>
+        <p>1 Nanometer (nm) = 0.0000000000497097 Chain (ch)</p>
         <p><strong>Example:</strong> convert 15 Chain (ch) to Nanometer (nm):<br>
-        15 Chain (ch) = 15 &times; 2.01168e+10 Nanometer (nm) = 3.01752e+11 Nanometer (nm)</p>
+        15 Chain (ch) = 15 &times; 20,116,800,000 Nanometer (nm) = 301,752,000,000 Nanometer (nm)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Chain [ch]</th><th>Nanometer [nm]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ch</td><td>2.01168e+10 nm</td></tr>
-<tr><td>2 ch</td><td>4.02336e+10 nm</td></tr>
-<tr><td>5 ch</td><td>1.00584e+11 nm</td></tr>
-<tr><td>10 ch</td><td>2.01168e+11 nm</td></tr>
-<tr><td>20 ch</td><td>4.02336e+11 nm</td></tr>
-<tr><td>50 ch</td><td>1.00584e+12 nm</td></tr>
-<tr><td>100 ch</td><td>2.01168e+12 nm</td></tr>
-<tr><td>200 ch</td><td>4.02336e+12 nm</td></tr>
-<tr><td>500 ch</td><td>1.00584e+13 nm</td></tr>
-<tr><td>1000 ch</td><td>2.01168e+13 nm</td></tr>
+            <tr><td>1 ch</td><td>20,116,800,000 nm</td></tr>
+<tr><td>2 ch</td><td>40,233,600,000 nm</td></tr>
+<tr><td>5 ch</td><td>100,584,000,000 nm</td></tr>
+<tr><td>10 ch</td><td>201,168,000,000 nm</td></tr>
+<tr><td>20 ch</td><td>402,336,000,000 nm</td></tr>
+<tr><td>50 ch</td><td>1,005,840,000,000 nm</td></tr>
+<tr><td>100 ch</td><td>2,011,680,000,000 nm</td></tr>
+<tr><td>200 ch</td><td>4,023,360,000,000 nm</td></tr>
+<tr><td>500 ch</td><td>10,058,400,000,000 nm</td></tr>
+<tr><td>1000 ch</td><td>20,116,800,000,000 nm</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

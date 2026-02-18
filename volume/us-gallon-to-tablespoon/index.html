@@ -104,7 +104,7 @@
         <p>1 US Gallon (gal) = 255.9992696 Tablespoon (tbsp)</p>
         <p>1 Tablespoon (tbsp) = 0.003906261145 US Gallon (gal)</p>
         <p><strong>Example:</strong> convert 15 US Gallon (gal) to Tablespoon (tbsp):<br>
-        15 US Gallon (gal) = 15 &times; 255.9992696 Tablespoon (tbsp) = 3,839.99 Tablespoon (tbsp)</p>
+        15 US Gallon (gal) = 15 &times; 255.9992696 Tablespoon (tbsp) = 3,839.989044 Tablespoon (tbsp)</p>
       </section>
 
       <!-- Definition -->
@@ -123,14 +123,14 @@
           <tbody>
             <tr><td>1 gal</td><td>255.9992696 tbsp</td></tr>
 <tr><td>2 gal</td><td>511.9985392 tbsp</td></tr>
-<tr><td>5 gal</td><td>1,280 tbsp</td></tr>
-<tr><td>10 gal</td><td>2,559.99 tbsp</td></tr>
-<tr><td>20 gal</td><td>5,119.99 tbsp</td></tr>
-<tr><td>50 gal</td><td>12,800 tbsp</td></tr>
-<tr><td>100 gal</td><td>25,599.9 tbsp</td></tr>
-<tr><td>200 gal</td><td>51,199.9 tbsp</td></tr>
-<tr><td>500 gal</td><td>128,000 tbsp</td></tr>
-<tr><td>1000 gal</td><td>255,999 tbsp</td></tr>
+<tr><td>5 gal</td><td>1,279.996348 tbsp</td></tr>
+<tr><td>10 gal</td><td>2,559.992696 tbsp</td></tr>
+<tr><td>20 gal</td><td>5,119.985392 tbsp</td></tr>
+<tr><td>50 gal</td><td>12,799.96348 tbsp</td></tr>
+<tr><td>100 gal</td><td>25,599.92696 tbsp</td></tr>
+<tr><td>200 gal</td><td>51,199.85392 tbsp</td></tr>
+<tr><td>500 gal</td><td>127,999.6348 tbsp</td></tr>
+<tr><td>1000 gal</td><td>255,999.2696 tbsp</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

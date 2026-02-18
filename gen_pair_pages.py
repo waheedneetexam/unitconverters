@@ -287,14 +287,33 @@ def temp_convert(value, from_id, to_id):
     else: return float('nan')
 
 def fmt(num):
+    """Format a number as a human-readable string without exponential notation."""
     if math.isnan(num) or math.isinf(num): return "N/A"
     if num == 0: return "0"
     abs_n = abs(num)
-    if abs_n >= 1e15 or (abs_n < 1e-6 and abs_n > 0):
-        return f"{num:.10g}"
-    if abs_n >= 1000:
-        return f"{num:,.6g}"
-    return f"{num:.10g}"
+    # Round to 10 significant digits to eliminate floating-point noise
+    # e.g. 1/1e-9 = 999999999.9999999 → rounds to 1000000000
+    if abs_n > 0:
+        sig = 10
+        magnitude = math.floor(math.log10(abs_n))
+        rounded = round(num, -int(magnitude) + sig - 1)
+    else:
+        rounded = num
+    abs_r = abs(rounded)
+    # Very small numbers: show enough decimal places
+    if abs_r <= 0.000001 and abs_r > 0:
+        decimals = max(0, -int(math.floor(math.log10(abs_r))) + 5)
+        decimals = min(decimals, 20)
+        return f"{rounded:.{decimals}f}".rstrip('0').rstrip('.')
+    # Large numbers: always show as full integer or decimal with commas
+    if abs_r >= 1000:
+        if rounded == int(rounded):
+            return f"{int(rounded):,}"
+        # Non-integer large number: show with enough decimal places
+        decimals = max(0, sig - 1 - int(math.floor(math.log10(abs_r))))
+        return f"{rounded:,.{decimals}f}".rstrip('0').rstrip('.')
+    # Normal range (< 1000)
+    return f"{rounded:.10g}"
 
 def slug(name):
     return name.lower().replace(" ", "-").replace("/", "-per-").replace("(", "").replace(")", "").replace("°", "").replace("²", "2").replace("³", "3").replace("·", "-").replace("µ", "u")
@@ -571,7 +590,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
     var isSwapped = false;
 
     function doConvert() {{
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) {{ toInput.value = ''; return; }}
       var result;
       if (!isSwapped) {{
@@ -584,10 +603,32 @@ def make_page(cat_key, cat, from_unit, to_unit):
 
     function formatNum(n) {{
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {{
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }}
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {{
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }}
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }}
+
+    function parseInput(s) {{
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }}
 
     fromInput.addEventListener('input', doConvert);

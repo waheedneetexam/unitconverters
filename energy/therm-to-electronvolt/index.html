@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Therm to Electronvolt</h2>
-        <p>1 Therm (thm) = 6.585518102e+26 Electronvolt (eV)</p>
-        <p>1 Electronvolt (eV) = 1.518483412e-27 Therm (thm)</p>
+        <p>1 Therm (thm) = 658,551,810,199,999,955,542,736,896 Electronvolt (eV)</p>
+        <p>1 Electronvolt (eV) = 0 Therm (thm)</p>
         <p><strong>Example:</strong> convert 15 Therm (thm) to Electronvolt (eV):<br>
-        15 Therm (thm) = 15 &times; 6.585518102e+26 Electronvolt (eV) = 9.878277154e+27 Electronvolt (eV)</p>
+        15 Therm (thm) = 15 &times; 658,551,810,199,999,955,542,736,896 Electronvolt (eV) = 9,878,277,153,999,999,661,045,186,560 Electronvolt (eV)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Therm [thm]</th><th>Electronvolt [eV]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 thm</td><td>6.585518102e+26 eV</td></tr>
-<tr><td>2 thm</td><td>1.31710362e+27 eV</td></tr>
-<tr><td>5 thm</td><td>3.292759051e+27 eV</td></tr>
-<tr><td>10 thm</td><td>6.585518102e+27 eV</td></tr>
-<tr><td>20 thm</td><td>1.31710362e+28 eV</td></tr>
-<tr><td>50 thm</td><td>3.292759051e+28 eV</td></tr>
-<tr><td>100 thm</td><td>6.585518102e+28 eV</td></tr>
-<tr><td>200 thm</td><td>1.31710362e+29 eV</td></tr>
-<tr><td>500 thm</td><td>3.292759051e+29 eV</td></tr>
-<tr><td>1000 thm</td><td>6.585518102e+29 eV</td></tr>
+            <tr><td>1 thm</td><td>658,551,810,199,999,955,542,736,896 eV</td></tr>
+<tr><td>2 thm</td><td>1,317,103,620,000,000,054,801,727,488 eV</td></tr>
+<tr><td>5 thm</td><td>3,292,759,050,999,999,777,713,684,480 eV</td></tr>
+<tr><td>10 thm</td><td>6,585,518,101,999,999,555,427,368,960 eV</td></tr>
+<tr><td>20 thm</td><td>13,171,036,199,999,999,998,261,460,992 eV</td></tr>
+<tr><td>50 thm</td><td>32,927,590,509,999,999,976,160,100,352 eV</td></tr>
+<tr><td>100 thm</td><td>65,855,181,019,999,999,952,320,200,704 eV</td></tr>
+<tr><td>200 thm</td><td>131,710,361,999,999,995,584,568,098,816 eV</td></tr>
+<tr><td>500 thm</td><td>329,275,905,100,000,034,945,973,092,352 eV</td></tr>
+<tr><td>1000 thm</td><td>658,551,810,200,000,069,891,946,184,704 eV</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

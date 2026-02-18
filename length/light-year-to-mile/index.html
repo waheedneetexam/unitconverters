@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Light Year to Mile</h2>
-        <p>1 Light Year (ly) = 5.87879e+12 Mile (mi)</p>
-        <p>1 Mile (mi) = 1.701029489e-13 Light Year (ly)</p>
+        <p>1 Light Year (ly) = 5,878,792,850,000 Mile (mi)</p>
+        <p>1 Mile (mi) = 0.000000000000170103 Light Year (ly)</p>
         <p><strong>Example:</strong> convert 15 Light Year (ly) to Mile (mi):<br>
-        15 Light Year (ly) = 15 &times; 5.87879e+12 Mile (mi) = 8.81819e+13 Mile (mi)</p>
+        15 Light Year (ly) = 15 &times; 5,878,792,850,000 Mile (mi) = 88,181,892,750,000 Mile (mi)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Light Year [ly]</th><th>Mile [mi]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ly</td><td>5.87879e+12 mi</td></tr>
-<tr><td>2 ly</td><td>1.17576e+13 mi</td></tr>
-<tr><td>5 ly</td><td>2.9394e+13 mi</td></tr>
-<tr><td>10 ly</td><td>5.87879e+13 mi</td></tr>
-<tr><td>20 ly</td><td>1.17576e+14 mi</td></tr>
-<tr><td>50 ly</td><td>2.9394e+14 mi</td></tr>
-<tr><td>100 ly</td><td>5.87879e+14 mi</td></tr>
-<tr><td>200 ly</td><td>1.17575857e+15 mi</td></tr>
-<tr><td>500 ly</td><td>2.939396425e+15 mi</td></tr>
-<tr><td>1000 ly</td><td>5.87879285e+15 mi</td></tr>
+            <tr><td>1 ly</td><td>5,878,792,850,000 mi</td></tr>
+<tr><td>2 ly</td><td>11,757,585,700,000 mi</td></tr>
+<tr><td>5 ly</td><td>29,393,964,250,000 mi</td></tr>
+<tr><td>10 ly</td><td>58,787,928,500,000 mi</td></tr>
+<tr><td>20 ly</td><td>117,575,857,000,000 mi</td></tr>
+<tr><td>50 ly</td><td>293,939,642,500,000 mi</td></tr>
+<tr><td>100 ly</td><td>587,879,285,000,000 mi</td></tr>
+<tr><td>200 ly</td><td>1,175,758,570,000,000 mi</td></tr>
+<tr><td>500 ly</td><td>2,939,396,425,000,000 mi</td></tr>
+<tr><td>1000 ly</td><td>5,878,792,850,000,000 mi</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

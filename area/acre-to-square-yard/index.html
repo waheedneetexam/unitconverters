@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Acre to Square Yard</h2>
-        <p>1 Acre (ac) = 4,840 Square Yard (yd²)</p>
+        <p>1 Acre (ac) = 4,840.001579 Square Yard (yd²)</p>
         <p>1 Square Yard (yd²) = 0.0002066115029 Acre (ac)</p>
         <p><strong>Example:</strong> convert 15 Acre (ac) to Square Yard (yd²):<br>
-        15 Acre (ac) = 15 &times; 4,840 Square Yard (yd²) = 72,600 Square Yard (yd²)</p>
+        15 Acre (ac) = 15 &times; 4,840.001579 Square Yard (yd²) = 72,600.02368 Square Yard (yd²)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Acre [ac]</th><th>Square Yard [yd²]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ac</td><td>4,840 yd²</td></tr>
-<tr><td>2 ac</td><td>9,680 yd²</td></tr>
-<tr><td>5 ac</td><td>24,200 yd²</td></tr>
-<tr><td>10 ac</td><td>48,400 yd²</td></tr>
-<tr><td>20 ac</td><td>96,800 yd²</td></tr>
-<tr><td>50 ac</td><td>242,000 yd²</td></tr>
-<tr><td>100 ac</td><td>484,000 yd²</td></tr>
-<tr><td>200 ac</td><td>968,000 yd²</td></tr>
-<tr><td>500 ac</td><td>2.42e+06 yd²</td></tr>
-<tr><td>1000 ac</td><td>4.84e+06 yd²</td></tr>
+            <tr><td>1 ac</td><td>4,840.001579 yd²</td></tr>
+<tr><td>2 ac</td><td>9,680.003157 yd²</td></tr>
+<tr><td>5 ac</td><td>24,200.00789 yd²</td></tr>
+<tr><td>10 ac</td><td>48,400.01579 yd²</td></tr>
+<tr><td>20 ac</td><td>96,800.03157 yd²</td></tr>
+<tr><td>50 ac</td><td>242,000.0789 yd²</td></tr>
+<tr><td>100 ac</td><td>484,000.1579 yd²</td></tr>
+<tr><td>200 ac</td><td>968,000.3157 yd²</td></tr>
+<tr><td>500 ac</td><td>2,420,000.789 yd²</td></tr>
+<tr><td>1000 ac</td><td>4,840,001.579 yd²</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

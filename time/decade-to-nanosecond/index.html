@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Decade to Nanosecond</h2>
-        <p>1 Decade (dec) = 3.15576e+17 Nanosecond (ns)</p>
-        <p>1 Nanosecond (ns) = 3.168808781e-18 Decade (dec)</p>
+        <p>1 Decade (dec) = 315,576,000,000,000,000 Nanosecond (ns)</p>
+        <p>1 Nanosecond (ns) = 0.00000000000000000317 Decade (dec)</p>
         <p><strong>Example:</strong> convert 15 Decade (dec) to Nanosecond (ns):<br>
-        15 Decade (dec) = 15 &times; 3.15576e+17 Nanosecond (ns) = 4.73364e+18 Nanosecond (ns)</p>
+        15 Decade (dec) = 15 &times; 315,576,000,000,000,000 Nanosecond (ns) = 4,733,640,000,000,000,000 Nanosecond (ns)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Decade [dec]</th><th>Nanosecond [ns]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 dec</td><td>3.15576e+17 ns</td></tr>
-<tr><td>2 dec</td><td>6.31152e+17 ns</td></tr>
-<tr><td>5 dec</td><td>1.57788e+18 ns</td></tr>
-<tr><td>10 dec</td><td>3.15576e+18 ns</td></tr>
-<tr><td>20 dec</td><td>6.31152e+18 ns</td></tr>
-<tr><td>50 dec</td><td>1.57788e+19 ns</td></tr>
-<tr><td>100 dec</td><td>3.15576e+19 ns</td></tr>
-<tr><td>200 dec</td><td>6.31152e+19 ns</td></tr>
-<tr><td>500 dec</td><td>1.57788e+20 ns</td></tr>
-<tr><td>1000 dec</td><td>3.15576e+20 ns</td></tr>
+            <tr><td>1 dec</td><td>315,576,000,000,000,000 ns</td></tr>
+<tr><td>2 dec</td><td>631,152,000,000,000,000 ns</td></tr>
+<tr><td>5 dec</td><td>1,577,880,000,000,000,000 ns</td></tr>
+<tr><td>10 dec</td><td>3,155,760,000,000,000,000 ns</td></tr>
+<tr><td>20 dec</td><td>6,311,520,000,000,000,000 ns</td></tr>
+<tr><td>50 dec</td><td>15,778,800,000,000,000,000 ns</td></tr>
+<tr><td>100 dec</td><td>31,557,600,000,000,000,000 ns</td></tr>
+<tr><td>200 dec</td><td>63,115,200,000,000,000,000 ns</td></tr>
+<tr><td>500 dec</td><td>157,788,000,000,000,000,000 ns</td></tr>
+<tr><td>1000 dec</td><td>315,576,000,000,000,000,000 ns</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

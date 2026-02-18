@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Nanosecond to Century</h2>
-        <p>1 Nanosecond (ns) = 3.168808781e-19 Century (c)</p>
-        <p>1 Century (c) = 3.15576e+18 Nanosecond (ns)</p>
+        <p>1 Nanosecond (ns) = 0.00000000000000000032 Century (c)</p>
+        <p>1 Century (c) = 3,155,760,000,000,000,000 Nanosecond (ns)</p>
         <p><strong>Example:</strong> convert 15 Nanosecond (ns) to Century (c):<br>
-        15 Nanosecond (ns) = 15 &times; 3.168808781e-19 Century (c) = 4.753213172e-18 Century (c)</p>
+        15 Nanosecond (ns) = 15 &times; 0.00000000000000000032 Century (c) = 0.00000000000000000475 Century (c)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Nanosecond [ns]</th><th>Century [c]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ns</td><td>3.168808781e-19 c</td></tr>
-<tr><td>2 ns</td><td>6.337617563e-19 c</td></tr>
-<tr><td>5 ns</td><td>1.584404391e-18 c</td></tr>
-<tr><td>10 ns</td><td>3.168808781e-18 c</td></tr>
-<tr><td>20 ns</td><td>6.337617563e-18 c</td></tr>
-<tr><td>50 ns</td><td>1.584404391e-17 c</td></tr>
-<tr><td>100 ns</td><td>3.168808781e-17 c</td></tr>
-<tr><td>200 ns</td><td>6.337617563e-17 c</td></tr>
-<tr><td>500 ns</td><td>1.584404391e-16 c</td></tr>
-<tr><td>1000 ns</td><td>3.168808781e-16 c</td></tr>
+            <tr><td>1 ns</td><td>0.00000000000000000032 c</td></tr>
+<tr><td>2 ns</td><td>0.00000000000000000063 c</td></tr>
+<tr><td>5 ns</td><td>0.00000000000000000158 c</td></tr>
+<tr><td>10 ns</td><td>0.00000000000000000317 c</td></tr>
+<tr><td>20 ns</td><td>0.00000000000000000634 c</td></tr>
+<tr><td>50 ns</td><td>0.00000000000000001584 c</td></tr>
+<tr><td>100 ns</td><td>0.00000000000000003169 c</td></tr>
+<tr><td>200 ns</td><td>0.00000000000000006338 c</td></tr>
+<tr><td>500 ns</td><td>0.00000000000000015844 c</td></tr>
+<tr><td>1000 ns</td><td>0.00000000000000031688 c</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

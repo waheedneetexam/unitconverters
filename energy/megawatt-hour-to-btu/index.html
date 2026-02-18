@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Megawatt-Hour to BTU</h2>
-        <p>1 Megawatt-Hour (MWh) = 3.41213e+06 BTU (BTU)</p>
-        <p>1 BTU (BTU) = 2.930722222e-07 Megawatt-Hour (MWh)</p>
+        <p>1 Megawatt-Hour (MWh) = 3,412,128.22 BTU (BTU)</p>
+        <p>1 BTU (BTU) = 0.000000293072 Megawatt-Hour (MWh)</p>
         <p><strong>Example:</strong> convert 15 Megawatt-Hour (MWh) to BTU (BTU):<br>
-        15 Megawatt-Hour (MWh) = 15 &times; 3.41213e+06 BTU (BTU) = 5.11819e+07 BTU (BTU)</p>
+        15 Megawatt-Hour (MWh) = 15 &times; 3,412,128.22 BTU (BTU) = 51,181,923.3 BTU (BTU)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Megawatt-Hour [MWh]</th><th>BTU [BTU]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 MWh</td><td>3.41213e+06 BTU</td></tr>
-<tr><td>2 MWh</td><td>6.82426e+06 BTU</td></tr>
-<tr><td>5 MWh</td><td>1.70606e+07 BTU</td></tr>
-<tr><td>10 MWh</td><td>3.41213e+07 BTU</td></tr>
-<tr><td>20 MWh</td><td>6.82426e+07 BTU</td></tr>
-<tr><td>50 MWh</td><td>1.70606e+08 BTU</td></tr>
-<tr><td>100 MWh</td><td>3.41213e+08 BTU</td></tr>
-<tr><td>200 MWh</td><td>6.82426e+08 BTU</td></tr>
-<tr><td>500 MWh</td><td>1.70606e+09 BTU</td></tr>
-<tr><td>1000 MWh</td><td>3.41213e+09 BTU</td></tr>
+            <tr><td>1 MWh</td><td>3,412,128.22 BTU</td></tr>
+<tr><td>2 MWh</td><td>6,824,256.44 BTU</td></tr>
+<tr><td>5 MWh</td><td>17,060,641.1 BTU</td></tr>
+<tr><td>10 MWh</td><td>34,121,282.2 BTU</td></tr>
+<tr><td>20 MWh</td><td>68,242,564.4 BTU</td></tr>
+<tr><td>50 MWh</td><td>170,606,411 BTU</td></tr>
+<tr><td>100 MWh</td><td>341,212,822 BTU</td></tr>
+<tr><td>200 MWh</td><td>682,425,644 BTU</td></tr>
+<tr><td>500 MWh</td><td>1,706,064,110 BTU</td></tr>
+<tr><td>1000 MWh</td><td>3,412,128,220 BTU</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

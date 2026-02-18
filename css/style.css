@@ -884,8 +884,10 @@ img {
   flex-shrink: 0;
 }
 
-.pair-row input[type="number"] {
+.pair-row input[type="number"],
+.pair-row input[type="text"] {
   flex: 1;
+  min-width: 0;
   padding: 10px 12px;
   border: 2px solid var(--border);
   border-radius: var(--radius-sm);
@@ -898,7 +900,8 @@ img {
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
-.pair-row input[type="number"]:focus {
+.pair-row input[type="number"]:focus,
+.pair-row input[type="text"]:focus {
   border-color: var(--blue-main);
   box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.12);
 }

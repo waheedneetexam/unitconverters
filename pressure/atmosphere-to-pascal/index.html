@@ -104,7 +104,7 @@
         <p>1 Atmosphere (atm) = 101,325 Pascal (Pa)</p>
         <p>1 Pascal (Pa) = 9.869232667e-06 Atmosphere (atm)</p>
         <p><strong>Example:</strong> convert 15 Atmosphere (atm) to Pascal (Pa):<br>
-        15 Atmosphere (atm) = 15 &times; 101,325 Pascal (Pa) = 1.51988e+06 Pascal (Pa)</p>
+        15 Atmosphere (atm) = 15 &times; 101,325 Pascal (Pa) = 1,519,875 Pascal (Pa)</p>
       </section>
 
       <!-- Definition -->
@@ -124,13 +124,13 @@
             <tr><td>1 atm</td><td>101,325 Pa</td></tr>
 <tr><td>2 atm</td><td>202,650 Pa</td></tr>
 <tr><td>5 atm</td><td>506,625 Pa</td></tr>
-<tr><td>10 atm</td><td>1.01325e+06 Pa</td></tr>
-<tr><td>20 atm</td><td>2.0265e+06 Pa</td></tr>
-<tr><td>50 atm</td><td>5.06625e+06 Pa</td></tr>
-<tr><td>100 atm</td><td>1.01325e+07 Pa</td></tr>
-<tr><td>200 atm</td><td>2.0265e+07 Pa</td></tr>
-<tr><td>500 atm</td><td>5.06625e+07 Pa</td></tr>
-<tr><td>1000 atm</td><td>1.01325e+08 Pa</td></tr>
+<tr><td>10 atm</td><td>1,013,250 Pa</td></tr>
+<tr><td>20 atm</td><td>2,026,500 Pa</td></tr>
+<tr><td>50 atm</td><td>5,066,250 Pa</td></tr>
+<tr><td>100 atm</td><td>10,132,500 Pa</td></tr>
+<tr><td>200 atm</td><td>20,265,000 Pa</td></tr>
+<tr><td>500 atm</td><td>50,662,500 Pa</td></tr>
+<tr><td>1000 atm</td><td>101,325,000 Pa</td></tr>
 
           </tbody>
         </table>
@@ -273,7 +273,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -286,10 +286,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

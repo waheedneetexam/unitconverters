@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Mile to Millimeter</h2>
-        <p>1 Mile (mi) = 1.60934e+06 Millimeter (mm)</p>
-        <p>1 Millimeter (mm) = 6.213711922e-07 Mile (mi)</p>
+        <p>1 Mile (mi) = 1,609,344 Millimeter (mm)</p>
+        <p>1 Millimeter (mm) = 0.000000621371 Mile (mi)</p>
         <p><strong>Example:</strong> convert 15 Mile (mi) to Millimeter (mm):<br>
-        15 Mile (mi) = 15 &times; 1.60934e+06 Millimeter (mm) = 2.41402e+07 Millimeter (mm)</p>
+        15 Mile (mi) = 15 &times; 1,609,344 Millimeter (mm) = 24,140,160 Millimeter (mm)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Mile [mi]</th><th>Millimeter [mm]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 mi</td><td>1.60934e+06 mm</td></tr>
-<tr><td>2 mi</td><td>3.21869e+06 mm</td></tr>
-<tr><td>5 mi</td><td>8.04672e+06 mm</td></tr>
-<tr><td>10 mi</td><td>1.60934e+07 mm</td></tr>
-<tr><td>20 mi</td><td>3.21869e+07 mm</td></tr>
-<tr><td>50 mi</td><td>8.04672e+07 mm</td></tr>
-<tr><td>100 mi</td><td>1.60934e+08 mm</td></tr>
-<tr><td>200 mi</td><td>3.21869e+08 mm</td></tr>
-<tr><td>500 mi</td><td>8.04672e+08 mm</td></tr>
-<tr><td>1000 mi</td><td>1.60934e+09 mm</td></tr>
+            <tr><td>1 mi</td><td>1,609,344 mm</td></tr>
+<tr><td>2 mi</td><td>3,218,688 mm</td></tr>
+<tr><td>5 mi</td><td>8,046,720 mm</td></tr>
+<tr><td>10 mi</td><td>16,093,440 mm</td></tr>
+<tr><td>20 mi</td><td>32,186,880 mm</td></tr>
+<tr><td>50 mi</td><td>80,467,200 mm</td></tr>
+<tr><td>100 mi</td><td>160,934,400 mm</td></tr>
+<tr><td>200 mi</td><td>321,868,800 mm</td></tr>
+<tr><td>500 mi</td><td>804,672,000 mm</td></tr>
+<tr><td>1000 mi</td><td>1,609,344,000 mm</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

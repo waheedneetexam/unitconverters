@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert BTU to Megawatt-Hour</h2>
-        <p>1 BTU (BTU) = 2.930722222e-07 Megawatt-Hour (MWh)</p>
-        <p>1 Megawatt-Hour (MWh) = 3.41213e+06 BTU (BTU)</p>
+        <p>1 BTU (BTU) = 0.000000293072 Megawatt-Hour (MWh)</p>
+        <p>1 Megawatt-Hour (MWh) = 3,412,128.22 BTU (BTU)</p>
         <p><strong>Example:</strong> convert 15 BTU (BTU) to Megawatt-Hour (MWh):<br>
-        15 BTU (BTU) = 15 &times; 2.930722222e-07 Megawatt-Hour (MWh) = 4.396083333e-06 Megawatt-Hour (MWh)</p>
+        15 BTU (BTU) = 15 &times; 0.000000293072 Megawatt-Hour (MWh) = 4.396083333e-06 Megawatt-Hour (MWh)</p>
       </section>
 
       <!-- Definition -->
@@ -121,8 +121,8 @@
             <tr><th>BTU [BTU]</th><th>Megawatt-Hour [MWh]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 BTU</td><td>2.930722222e-07 MWh</td></tr>
-<tr><td>2 BTU</td><td>5.861444444e-07 MWh</td></tr>
+            <tr><td>1 BTU</td><td>0.000000293072 MWh</td></tr>
+<tr><td>2 BTU</td><td>0.000000586144 MWh</td></tr>
 <tr><td>5 BTU</td><td>1.465361111e-06 MWh</td></tr>
 <tr><td>10 BTU</td><td>2.930722222e-06 MWh</td></tr>
 <tr><td>20 BTU</td><td>5.861444444e-06 MWh</td></tr>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

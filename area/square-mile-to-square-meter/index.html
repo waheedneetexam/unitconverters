@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Square Mile to Square Meter</h2>
-        <p>1 Square Mile (mi²) = 2.58999e+06 Square Meter (m²)</p>
-        <p>1 Square Meter (m²) = 3.861021586e-07 Square Mile (mi²)</p>
+        <p>1 Square Mile (mi²) = 2,589,988.11 Square Meter (m²)</p>
+        <p>1 Square Meter (m²) = 0.000000386102 Square Mile (mi²)</p>
         <p><strong>Example:</strong> convert 15 Square Mile (mi²) to Square Meter (m²):<br>
-        15 Square Mile (mi²) = 15 &times; 2.58999e+06 Square Meter (m²) = 3.88498e+07 Square Meter (m²)</p>
+        15 Square Mile (mi²) = 15 &times; 2,589,988.11 Square Meter (m²) = 38,849,821.65 Square Meter (m²)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Square Mile [mi²]</th><th>Square Meter [m²]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 mi²</td><td>2.58999e+06 m²</td></tr>
-<tr><td>2 mi²</td><td>5.17998e+06 m²</td></tr>
-<tr><td>5 mi²</td><td>1.29499e+07 m²</td></tr>
-<tr><td>10 mi²</td><td>2.58999e+07 m²</td></tr>
-<tr><td>20 mi²</td><td>5.17998e+07 m²</td></tr>
-<tr><td>50 mi²</td><td>1.29499e+08 m²</td></tr>
-<tr><td>100 mi²</td><td>2.58999e+08 m²</td></tr>
-<tr><td>200 mi²</td><td>5.17998e+08 m²</td></tr>
-<tr><td>500 mi²</td><td>1.29499e+09 m²</td></tr>
-<tr><td>1000 mi²</td><td>2.58999e+09 m²</td></tr>
+            <tr><td>1 mi²</td><td>2,589,988.11 m²</td></tr>
+<tr><td>2 mi²</td><td>5,179,976.22 m²</td></tr>
+<tr><td>5 mi²</td><td>12,949,940.55 m²</td></tr>
+<tr><td>10 mi²</td><td>25,899,881.1 m²</td></tr>
+<tr><td>20 mi²</td><td>51,799,762.2 m²</td></tr>
+<tr><td>50 mi²</td><td>129,499,405.5 m²</td></tr>
+<tr><td>100 mi²</td><td>258,998,811 m²</td></tr>
+<tr><td>200 mi²</td><td>517,997,622 m²</td></tr>
+<tr><td>500 mi²</td><td>1,294,994,055 m²</td></tr>
+<tr><td>1000 mi²</td><td>2,589,988,110 m²</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

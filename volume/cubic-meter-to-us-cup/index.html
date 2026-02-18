@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Cubic Meter to US Cup</h2>
-        <p>1 Cubic Meter (m³) = 4,226.76 US Cup (cup)</p>
+        <p>1 Cubic Meter (m³) = 4,226.757063 US Cup (cup)</p>
         <p>1 US Cup (cup) = 0.000236588 Cubic Meter (m³)</p>
         <p><strong>Example:</strong> convert 15 Cubic Meter (m³) to US Cup (cup):<br>
-        15 Cubic Meter (m³) = 15 &times; 4,226.76 US Cup (cup) = 63,401.4 US Cup (cup)</p>
+        15 Cubic Meter (m³) = 15 &times; 4,226.757063 US Cup (cup) = 63,401.35594 US Cup (cup)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Cubic Meter [m³]</th><th>US Cup [cup]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 m³</td><td>4,226.76 cup</td></tr>
-<tr><td>2 m³</td><td>8,453.51 cup</td></tr>
-<tr><td>5 m³</td><td>21,133.8 cup</td></tr>
-<tr><td>10 m³</td><td>42,267.6 cup</td></tr>
-<tr><td>20 m³</td><td>84,535.1 cup</td></tr>
-<tr><td>50 m³</td><td>211,338 cup</td></tr>
-<tr><td>100 m³</td><td>422,676 cup</td></tr>
-<tr><td>200 m³</td><td>845,351 cup</td></tr>
-<tr><td>500 m³</td><td>2.11338e+06 cup</td></tr>
-<tr><td>1000 m³</td><td>4.22676e+06 cup</td></tr>
+            <tr><td>1 m³</td><td>4,226.757063 cup</td></tr>
+<tr><td>2 m³</td><td>8,453.514126 cup</td></tr>
+<tr><td>5 m³</td><td>21,133.78531 cup</td></tr>
+<tr><td>10 m³</td><td>42,267.57063 cup</td></tr>
+<tr><td>20 m³</td><td>84,535.14126 cup</td></tr>
+<tr><td>50 m³</td><td>211,337.8531 cup</td></tr>
+<tr><td>100 m³</td><td>422,675.7063 cup</td></tr>
+<tr><td>200 m³</td><td>845,351.4126 cup</td></tr>
+<tr><td>500 m³</td><td>2,113,378.531 cup</td></tr>
+<tr><td>1000 m³</td><td>4,226,757.063 cup</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

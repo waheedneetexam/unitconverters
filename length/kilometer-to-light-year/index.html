@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Kilometer to Light Year</h2>
-        <p>1 Kilometer (km) = 1.056970722e-13 Light Year (ly)</p>
-        <p>1 Light Year (ly) = 9.461e+12 Kilometer (km)</p>
+        <p>1 Kilometer (km) = 0.000000000000105697 Light Year (ly)</p>
+        <p>1 Light Year (ly) = 9,461,000,000,000 Kilometer (km)</p>
         <p><strong>Example:</strong> convert 15 Kilometer (km) to Light Year (ly):<br>
-        15 Kilometer (km) = 15 &times; 1.056970722e-13 Light Year (ly) = 1.585456083e-12 Light Year (ly)</p>
+        15 Kilometer (km) = 15 &times; 0.000000000000105697 Light Year (ly) = 0.00000000000158546 Light Year (ly)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Kilometer [km]</th><th>Light Year [ly]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 km</td><td>1.056970722e-13 ly</td></tr>
-<tr><td>2 km</td><td>2.113941444e-13 ly</td></tr>
-<tr><td>5 km</td><td>5.28485361e-13 ly</td></tr>
-<tr><td>10 km</td><td>1.056970722e-12 ly</td></tr>
-<tr><td>20 km</td><td>2.113941444e-12 ly</td></tr>
-<tr><td>50 km</td><td>5.28485361e-12 ly</td></tr>
-<tr><td>100 km</td><td>1.056970722e-11 ly</td></tr>
-<tr><td>200 km</td><td>2.113941444e-11 ly</td></tr>
-<tr><td>500 km</td><td>5.28485361e-11 ly</td></tr>
-<tr><td>1000 km</td><td>1.056970722e-10 ly</td></tr>
+            <tr><td>1 km</td><td>0.000000000000105697 ly</td></tr>
+<tr><td>2 km</td><td>0.000000000000211394 ly</td></tr>
+<tr><td>5 km</td><td>0.000000000000528485 ly</td></tr>
+<tr><td>10 km</td><td>0.00000000000105697 ly</td></tr>
+<tr><td>20 km</td><td>0.00000000000211394 ly</td></tr>
+<tr><td>50 km</td><td>0.00000000000528485 ly</td></tr>
+<tr><td>100 km</td><td>0.0000000000105697 ly</td></tr>
+<tr><td>200 km</td><td>0.0000000000211394 ly</td></tr>
+<tr><td>500 km</td><td>0.0000000000528485 ly</td></tr>
+<tr><td>1000 km</td><td>0.000000000105697 ly</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Megapascal to Torr</h2>
-        <p>1 Megapascal (MPa) = 7,500.64 Torr (Torr)</p>
+        <p>1 Megapascal (MPa) = 7,500.637554 Torr (Torr)</p>
         <p>1 Torr (Torr) = 0.000133322 Megapascal (MPa)</p>
         <p><strong>Example:</strong> convert 15 Megapascal (MPa) to Torr (Torr):<br>
-        15 Megapascal (MPa) = 15 &times; 7,500.64 Torr (Torr) = 112,510 Torr (Torr)</p>
+        15 Megapascal (MPa) = 15 &times; 7,500.637554 Torr (Torr) = 112,509.5633 Torr (Torr)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Megapascal [MPa]</th><th>Torr [Torr]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 MPa</td><td>7,500.64 Torr</td></tr>
-<tr><td>2 MPa</td><td>15,001.3 Torr</td></tr>
-<tr><td>5 MPa</td><td>37,503.2 Torr</td></tr>
-<tr><td>10 MPa</td><td>75,006.4 Torr</td></tr>
-<tr><td>20 MPa</td><td>150,013 Torr</td></tr>
-<tr><td>50 MPa</td><td>375,032 Torr</td></tr>
-<tr><td>100 MPa</td><td>750,064 Torr</td></tr>
-<tr><td>200 MPa</td><td>1.50013e+06 Torr</td></tr>
-<tr><td>500 MPa</td><td>3.75032e+06 Torr</td></tr>
-<tr><td>1000 MPa</td><td>7.50064e+06 Torr</td></tr>
+            <tr><td>1 MPa</td><td>7,500.637554 Torr</td></tr>
+<tr><td>2 MPa</td><td>15,001.27511 Torr</td></tr>
+<tr><td>5 MPa</td><td>37,503.18777 Torr</td></tr>
+<tr><td>10 MPa</td><td>75,006.37554 Torr</td></tr>
+<tr><td>20 MPa</td><td>150,012.7511 Torr</td></tr>
+<tr><td>50 MPa</td><td>375,031.8777 Torr</td></tr>
+<tr><td>100 MPa</td><td>750,063.7554 Torr</td></tr>
+<tr><td>200 MPa</td><td>1,500,127.511 Torr</td></tr>
+<tr><td>500 MPa</td><td>3,750,318.777 Torr</td></tr>
+<tr><td>1000 MPa</td><td>7,500,637.554 Torr</td></tr>
 
           </tbody>
         </table>
@@ -273,7 +273,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -286,10 +286,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

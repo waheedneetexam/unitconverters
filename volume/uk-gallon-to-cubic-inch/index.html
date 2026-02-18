@@ -104,7 +104,7 @@
         <p>1 UK Gallon (gal) = 277.4188233 Cubic Inch (in³)</p>
         <p>1 Cubic Inch (in³) = 0.003604658069 UK Gallon (gal)</p>
         <p><strong>Example:</strong> convert 15 UK Gallon (gal) to Cubic Inch (in³):<br>
-        15 UK Gallon (gal) = 15 &times; 277.4188233 Cubic Inch (in³) = 4,161.28 Cubic Inch (in³)</p>
+        15 UK Gallon (gal) = 15 &times; 277.4188233 Cubic Inch (in³) = 4,161.28235 Cubic Inch (in³)</p>
       </section>
 
       <!-- Definition -->
@@ -123,14 +123,14 @@
           <tbody>
             <tr><td>1 gal</td><td>277.4188233 in³</td></tr>
 <tr><td>2 gal</td><td>554.8376467 in³</td></tr>
-<tr><td>5 gal</td><td>1,387.09 in³</td></tr>
-<tr><td>10 gal</td><td>2,774.19 in³</td></tr>
-<tr><td>20 gal</td><td>5,548.38 in³</td></tr>
-<tr><td>50 gal</td><td>13,870.9 in³</td></tr>
-<tr><td>100 gal</td><td>27,741.9 in³</td></tr>
-<tr><td>200 gal</td><td>55,483.8 in³</td></tr>
-<tr><td>500 gal</td><td>138,709 in³</td></tr>
-<tr><td>1000 gal</td><td>277,419 in³</td></tr>
+<tr><td>5 gal</td><td>1,387.094117 in³</td></tr>
+<tr><td>10 gal</td><td>2,774.188233 in³</td></tr>
+<tr><td>20 gal</td><td>5,548.376467 in³</td></tr>
+<tr><td>50 gal</td><td>13,870.94117 in³</td></tr>
+<tr><td>100 gal</td><td>27,741.88233 in³</td></tr>
+<tr><td>200 gal</td><td>55,483.76467 in³</td></tr>
+<tr><td>500 gal</td><td>138,709.4117 in³</td></tr>
+<tr><td>1000 gal</td><td>277,418.8233 in³</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

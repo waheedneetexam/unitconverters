@@ -104,7 +104,7 @@
         <p>1 US Ton (ton) = 907.185 Kilogram (kg)</p>
         <p>1 Kilogram (kg) = 0.001102310995 US Ton (ton)</p>
         <p><strong>Example:</strong> convert 15 US Ton (ton) to Kilogram (kg):<br>
-        15 US Ton (ton) = 15 &times; 907.185 Kilogram (kg) = 13,607.8 Kilogram (kg)</p>
+        15 US Ton (ton) = 15 &times; 907.185 Kilogram (kg) = 13,607.775 Kilogram (kg)</p>
       </section>
 
       <!-- Definition -->
@@ -123,13 +123,13 @@
           <tbody>
             <tr><td>1 ton</td><td>907.185 kg</td></tr>
 <tr><td>2 ton</td><td>1,814.37 kg</td></tr>
-<tr><td>5 ton</td><td>4,535.92 kg</td></tr>
+<tr><td>5 ton</td><td>4,535.925 kg</td></tr>
 <tr><td>10 ton</td><td>9,071.85 kg</td></tr>
 <tr><td>20 ton</td><td>18,143.7 kg</td></tr>
-<tr><td>50 ton</td><td>45,359.2 kg</td></tr>
+<tr><td>50 ton</td><td>45,359.25 kg</td></tr>
 <tr><td>100 ton</td><td>90,718.5 kg</td></tr>
 <tr><td>200 ton</td><td>181,437 kg</td></tr>
-<tr><td>500 ton</td><td>453,592 kg</td></tr>
+<tr><td>500 ton</td><td>453,592.5 kg</td></tr>
 <tr><td>1000 ton</td><td>907,185 kg</td></tr>
 
           </tbody>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

@@ -104,7 +104,7 @@
         <p>1 Year (yr) = 525,960 Minute (min)</p>
         <p>1 Minute (min) = 1.901285269e-06 Year (yr)</p>
         <p><strong>Example:</strong> convert 15 Year (yr) to Minute (min):<br>
-        15 Year (yr) = 15 &times; 525,960 Minute (min) = 7.8894e+06 Minute (min)</p>
+        15 Year (yr) = 15 &times; 525,960 Minute (min) = 7,889,400 Minute (min)</p>
       </section>
 
       <!-- Definition -->
@@ -122,15 +122,15 @@
           </thead>
           <tbody>
             <tr><td>1 yr</td><td>525,960 min</td></tr>
-<tr><td>2 yr</td><td>1.05192e+06 min</td></tr>
-<tr><td>5 yr</td><td>2.6298e+06 min</td></tr>
-<tr><td>10 yr</td><td>5.2596e+06 min</td></tr>
-<tr><td>20 yr</td><td>1.05192e+07 min</td></tr>
-<tr><td>50 yr</td><td>2.6298e+07 min</td></tr>
-<tr><td>100 yr</td><td>5.2596e+07 min</td></tr>
-<tr><td>200 yr</td><td>1.05192e+08 min</td></tr>
-<tr><td>500 yr</td><td>2.6298e+08 min</td></tr>
-<tr><td>1000 yr</td><td>5.2596e+08 min</td></tr>
+<tr><td>2 yr</td><td>1,051,920 min</td></tr>
+<tr><td>5 yr</td><td>2,629,800 min</td></tr>
+<tr><td>10 yr</td><td>5,259,600 min</td></tr>
+<tr><td>20 yr</td><td>10,519,200 min</td></tr>
+<tr><td>50 yr</td><td>26,298,000 min</td></tr>
+<tr><td>100 yr</td><td>52,596,000 min</td></tr>
+<tr><td>200 yr</td><td>105,192,000 min</td></tr>
+<tr><td>500 yr</td><td>262,980,000 min</td></tr>
+<tr><td>1000 yr</td><td>525,960,000 min</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

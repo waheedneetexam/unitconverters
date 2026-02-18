@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Square Millimeter to Hectare</h2>
-        <p>1 Square Millimeter (mm²) = 1e-10 Hectare (ha)</p>
-        <p>1 Hectare (ha) = 1e+10 Square Millimeter (mm²)</p>
+        <p>1 Square Millimeter (mm²) = 0.0000000001 Hectare (ha)</p>
+        <p>1 Hectare (ha) = 10,000,000,000 Square Millimeter (mm²)</p>
         <p><strong>Example:</strong> convert 15 Square Millimeter (mm²) to Hectare (ha):<br>
-        15 Square Millimeter (mm²) = 15 &times; 1e-10 Hectare (ha) = 1.5e-09 Hectare (ha)</p>
+        15 Square Millimeter (mm²) = 15 &times; 0.0000000001 Hectare (ha) = 0.0000000015 Hectare (ha)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Square Millimeter [mm²]</th><th>Hectare [ha]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 mm²</td><td>1e-10 ha</td></tr>
-<tr><td>2 mm²</td><td>2e-10 ha</td></tr>
-<tr><td>5 mm²</td><td>5e-10 ha</td></tr>
-<tr><td>10 mm²</td><td>1e-09 ha</td></tr>
-<tr><td>20 mm²</td><td>2e-09 ha</td></tr>
-<tr><td>50 mm²</td><td>5e-09 ha</td></tr>
-<tr><td>100 mm²</td><td>1e-08 ha</td></tr>
-<tr><td>200 mm²</td><td>2e-08 ha</td></tr>
-<tr><td>500 mm²</td><td>5e-08 ha</td></tr>
-<tr><td>1000 mm²</td><td>1e-07 ha</td></tr>
+            <tr><td>1 mm²</td><td>0.0000000001 ha</td></tr>
+<tr><td>2 mm²</td><td>0.0000000002 ha</td></tr>
+<tr><td>5 mm²</td><td>0.0000000005 ha</td></tr>
+<tr><td>10 mm²</td><td>0.000000001 ha</td></tr>
+<tr><td>20 mm²</td><td>0.000000002 ha</td></tr>
+<tr><td>50 mm²</td><td>0.000000005 ha</td></tr>
+<tr><td>100 mm²</td><td>0.00000001 ha</td></tr>
+<tr><td>200 mm²</td><td>0.00000002 ha</td></tr>
+<tr><td>500 mm²</td><td>0.00000005 ha</td></tr>
+<tr><td>1000 mm²</td><td>0.0000001 ha</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

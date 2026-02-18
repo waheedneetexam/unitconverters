@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Centimeter to Light Year</h2>
-        <p>1 Centimeter (cm) = 1.056970722e-18 Light Year (ly)</p>
-        <p>1 Light Year (ly) = 9.461e+17 Centimeter (cm)</p>
+        <p>1 Centimeter (cm) = 0.00000000000000000106 Light Year (ly)</p>
+        <p>1 Light Year (ly) = 946,100,000,000,000,000 Centimeter (cm)</p>
         <p><strong>Example:</strong> convert 15 Centimeter (cm) to Light Year (ly):<br>
-        15 Centimeter (cm) = 15 &times; 1.056970722e-18 Light Year (ly) = 1.585456083e-17 Light Year (ly)</p>
+        15 Centimeter (cm) = 15 &times; 0.00000000000000000106 Light Year (ly) = 0.00000000000000001585 Light Year (ly)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Centimeter [cm]</th><th>Light Year [ly]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 cm</td><td>1.056970722e-18 ly</td></tr>
-<tr><td>2 cm</td><td>2.113941444e-18 ly</td></tr>
-<tr><td>5 cm</td><td>5.28485361e-18 ly</td></tr>
-<tr><td>10 cm</td><td>1.056970722e-17 ly</td></tr>
-<tr><td>20 cm</td><td>2.113941444e-17 ly</td></tr>
-<tr><td>50 cm</td><td>5.28485361e-17 ly</td></tr>
-<tr><td>100 cm</td><td>1.056970722e-16 ly</td></tr>
-<tr><td>200 cm</td><td>2.113941444e-16 ly</td></tr>
-<tr><td>500 cm</td><td>5.28485361e-16 ly</td></tr>
-<tr><td>1000 cm</td><td>1.056970722e-15 ly</td></tr>
+            <tr><td>1 cm</td><td>0.00000000000000000106 ly</td></tr>
+<tr><td>2 cm</td><td>0.00000000000000000211 ly</td></tr>
+<tr><td>5 cm</td><td>0.00000000000000000528 ly</td></tr>
+<tr><td>10 cm</td><td>0.00000000000000001057 ly</td></tr>
+<tr><td>20 cm</td><td>0.00000000000000002114 ly</td></tr>
+<tr><td>50 cm</td><td>0.00000000000000005285 ly</td></tr>
+<tr><td>100 cm</td><td>0.0000000000000001057 ly</td></tr>
+<tr><td>200 cm</td><td>0.00000000000000021139 ly</td></tr>
+<tr><td>500 cm</td><td>0.00000000000000052849 ly</td></tr>
+<tr><td>1000 cm</td><td>0.00000000000000105697 ly</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

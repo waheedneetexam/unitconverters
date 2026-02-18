@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Cubic Yard to US Pint</h2>
-        <p>1 Cubic Yard (yd³) = 1,615.79 US Pint (pt)</p>
+        <p>1 Cubic Yard (yd³) = 1,615.794123 US Pint (pt)</p>
         <p>1 US Pint (pt) = 0.0006188907273 Cubic Yard (yd³)</p>
         <p><strong>Example:</strong> convert 15 Cubic Yard (yd³) to US Pint (pt):<br>
-        15 Cubic Yard (yd³) = 15 &times; 1,615.79 US Pint (pt) = 24,236.9 US Pint (pt)</p>
+        15 Cubic Yard (yd³) = 15 &times; 1,615.794123 US Pint (pt) = 24,236.91185 US Pint (pt)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Cubic Yard [yd³]</th><th>US Pint [pt]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 yd³</td><td>1,615.79 pt</td></tr>
-<tr><td>2 yd³</td><td>3,231.59 pt</td></tr>
-<tr><td>5 yd³</td><td>8,078.97 pt</td></tr>
-<tr><td>10 yd³</td><td>16,157.9 pt</td></tr>
-<tr><td>20 yd³</td><td>32,315.9 pt</td></tr>
-<tr><td>50 yd³</td><td>80,789.7 pt</td></tr>
-<tr><td>100 yd³</td><td>161,579 pt</td></tr>
-<tr><td>200 yd³</td><td>323,159 pt</td></tr>
-<tr><td>500 yd³</td><td>807,897 pt</td></tr>
-<tr><td>1000 yd³</td><td>1.61579e+06 pt</td></tr>
+            <tr><td>1 yd³</td><td>1,615.794123 pt</td></tr>
+<tr><td>2 yd³</td><td>3,231.588246 pt</td></tr>
+<tr><td>5 yd³</td><td>8,078.970616 pt</td></tr>
+<tr><td>10 yd³</td><td>16,157.94123 pt</td></tr>
+<tr><td>20 yd³</td><td>32,315.88246 pt</td></tr>
+<tr><td>50 yd³</td><td>80,789.70616 pt</td></tr>
+<tr><td>100 yd³</td><td>161,579.4123 pt</td></tr>
+<tr><td>200 yd³</td><td>323,158.8246 pt</td></tr>
+<tr><td>500 yd³</td><td>807,897.0616 pt</td></tr>
+<tr><td>1000 yd³</td><td>1,615,794.123 pt</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

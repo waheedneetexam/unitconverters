@@ -104,7 +104,7 @@
         <p>1 Ounce (oz) = 141.7475 Carat (ct)</p>
         <p>1 Carat (ct) = 0.007054798145 Ounce (oz)</p>
         <p><strong>Example:</strong> convert 15 Ounce (oz) to Carat (ct):<br>
-        15 Ounce (oz) = 15 &times; 141.7475 Carat (ct) = 2,126.21 Carat (ct)</p>
+        15 Ounce (oz) = 15 &times; 141.7475 Carat (ct) = 2,126.2125 Carat (ct)</p>
       </section>
 
       <!-- Definition -->
@@ -124,13 +124,13 @@
             <tr><td>1 oz</td><td>141.7475 ct</td></tr>
 <tr><td>2 oz</td><td>283.495 ct</td></tr>
 <tr><td>5 oz</td><td>708.7375 ct</td></tr>
-<tr><td>10 oz</td><td>1,417.47 ct</td></tr>
+<tr><td>10 oz</td><td>1,417.475 ct</td></tr>
 <tr><td>20 oz</td><td>2,834.95 ct</td></tr>
-<tr><td>50 oz</td><td>7,087.38 ct</td></tr>
-<tr><td>100 oz</td><td>14,174.8 ct</td></tr>
+<tr><td>50 oz</td><td>7,087.375 ct</td></tr>
+<tr><td>100 oz</td><td>14,174.75 ct</td></tr>
 <tr><td>200 oz</td><td>28,349.5 ct</td></tr>
-<tr><td>500 oz</td><td>70,873.8 ct</td></tr>
-<tr><td>1000 oz</td><td>141,748 ct</td></tr>
+<tr><td>500 oz</td><td>70,873.75 ct</td></tr>
+<tr><td>1000 oz</td><td>141,747.5 ct</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

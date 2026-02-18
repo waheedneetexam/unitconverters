@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Speed of Light to Knot</h2>
-        <p>1 Speed of Light (c) = 5.8275e+08 Knot (kn)</p>
-        <p>1 Knot (kn) = 1.716000474e-09 Speed of Light (c)</p>
+        <p>1 Speed of Light (c) = 582,750,421.8 Knot (kn)</p>
+        <p>1 Knot (kn) = 0.000000001716 Speed of Light (c)</p>
         <p><strong>Example:</strong> convert 15 Speed of Light (c) to Knot (kn):<br>
-        15 Speed of Light (c) = 15 &times; 5.8275e+08 Knot (kn) = 8.74126e+09 Knot (kn)</p>
+        15 Speed of Light (c) = 15 &times; 582,750,421.8 Knot (kn) = 8,741,256,327 Knot (kn)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Speed of Light [c]</th><th>Knot [kn]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 c</td><td>5.8275e+08 kn</td></tr>
-<tr><td>2 c</td><td>1.1655e+09 kn</td></tr>
-<tr><td>5 c</td><td>2.91375e+09 kn</td></tr>
-<tr><td>10 c</td><td>5.8275e+09 kn</td></tr>
-<tr><td>20 c</td><td>1.1655e+10 kn</td></tr>
-<tr><td>50 c</td><td>2.91375e+10 kn</td></tr>
-<tr><td>100 c</td><td>5.8275e+10 kn</td></tr>
-<tr><td>200 c</td><td>1.1655e+11 kn</td></tr>
-<tr><td>500 c</td><td>2.91375e+11 kn</td></tr>
-<tr><td>1000 c</td><td>5.8275e+11 kn</td></tr>
+            <tr><td>1 c</td><td>582,750,421.8 kn</td></tr>
+<tr><td>2 c</td><td>1,165,500,844 kn</td></tr>
+<tr><td>5 c</td><td>2,913,752,109 kn</td></tr>
+<tr><td>10 c</td><td>5,827,504,218 kn</td></tr>
+<tr><td>20 c</td><td>11,655,008,440 kn</td></tr>
+<tr><td>50 c</td><td>29,137,521,090 kn</td></tr>
+<tr><td>100 c</td><td>58,275,042,180 kn</td></tr>
+<tr><td>200 c</td><td>116,550,084,400 kn</td></tr>
+<tr><td>500 c</td><td>291,375,210,900 kn</td></tr>
+<tr><td>1000 c</td><td>582,750,421,800 kn</td></tr>
 
           </tbody>
         </table>
@@ -225,7 +225,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -238,10 +238,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

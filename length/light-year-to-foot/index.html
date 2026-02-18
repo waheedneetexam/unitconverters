@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Light Year to Foot</h2>
-        <p>1 Light Year (ly) = 3.104002625e+16 Foot (ft)</p>
-        <p>1 Foot (ft) = 3.22164676e-17 Light Year (ly)</p>
+        <p>1 Light Year (ly) = 31,040,026,250,000,000 Foot (ft)</p>
+        <p>1 Foot (ft) = 0.00000000000000003222 Light Year (ly)</p>
         <p><strong>Example:</strong> convert 15 Light Year (ly) to Foot (ft):<br>
-        15 Light Year (ly) = 15 &times; 3.104002625e+16 Foot (ft) = 4.656003937e+17 Foot (ft)</p>
+        15 Light Year (ly) = 15 &times; 31,040,026,250,000,000 Foot (ft) = 465,600,393,700,000,000 Foot (ft)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Light Year [ly]</th><th>Foot [ft]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ly</td><td>3.104002625e+16 ft</td></tr>
-<tr><td>2 ly</td><td>6.208005249e+16 ft</td></tr>
-<tr><td>5 ly</td><td>1.552001312e+17 ft</td></tr>
-<tr><td>10 ly</td><td>3.104002625e+17 ft</td></tr>
-<tr><td>20 ly</td><td>6.208005249e+17 ft</td></tr>
-<tr><td>50 ly</td><td>1.552001312e+18 ft</td></tr>
-<tr><td>100 ly</td><td>3.104002625e+18 ft</td></tr>
-<tr><td>200 ly</td><td>6.208005249e+18 ft</td></tr>
-<tr><td>500 ly</td><td>1.552001312e+19 ft</td></tr>
-<tr><td>1000 ly</td><td>3.104002625e+19 ft</td></tr>
+            <tr><td>1 ly</td><td>31,040,026,250,000,000 ft</td></tr>
+<tr><td>2 ly</td><td>62,080,052,490,000,000 ft</td></tr>
+<tr><td>5 ly</td><td>155,200,131,200,000,000 ft</td></tr>
+<tr><td>10 ly</td><td>310,400,262,500,000,000 ft</td></tr>
+<tr><td>20 ly</td><td>620,800,524,900,000,000 ft</td></tr>
+<tr><td>50 ly</td><td>1,552,001,312,000,000,000 ft</td></tr>
+<tr><td>100 ly</td><td>3,104,002,625,000,000,000 ft</td></tr>
+<tr><td>200 ly</td><td>6,208,005,248,999,999,488 ft</td></tr>
+<tr><td>500 ly</td><td>15,520,013,120,000,000,000 ft</td></tr>
+<tr><td>1000 ly</td><td>31,040,026,249,999,998,976 ft</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Acre to Square Millimeter</h2>
-        <p>1 Acre (ac) = 4.04686e+09 Square Millimeter (mm²)</p>
-        <p>1 Square Millimeter (mm²) = 2.471054073e-10 Acre (ac)</p>
+        <p>1 Acre (ac) = 4,046,856,000 Square Millimeter (mm²)</p>
+        <p>1 Square Millimeter (mm²) = 0.000000000247105 Acre (ac)</p>
         <p><strong>Example:</strong> convert 15 Acre (ac) to Square Millimeter (mm²):<br>
-        15 Acre (ac) = 15 &times; 4.04686e+09 Square Millimeter (mm²) = 6.07028e+10 Square Millimeter (mm²)</p>
+        15 Acre (ac) = 15 &times; 4,046,856,000 Square Millimeter (mm²) = 60,702,840,000 Square Millimeter (mm²)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Acre [ac]</th><th>Square Millimeter [mm²]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ac</td><td>4.04686e+09 mm²</td></tr>
-<tr><td>2 ac</td><td>8.09371e+09 mm²</td></tr>
-<tr><td>5 ac</td><td>2.02343e+10 mm²</td></tr>
-<tr><td>10 ac</td><td>4.04686e+10 mm²</td></tr>
-<tr><td>20 ac</td><td>8.09371e+10 mm²</td></tr>
-<tr><td>50 ac</td><td>2.02343e+11 mm²</td></tr>
-<tr><td>100 ac</td><td>4.04686e+11 mm²</td></tr>
-<tr><td>200 ac</td><td>8.09371e+11 mm²</td></tr>
-<tr><td>500 ac</td><td>2.02343e+12 mm²</td></tr>
-<tr><td>1000 ac</td><td>4.04686e+12 mm²</td></tr>
+            <tr><td>1 ac</td><td>4,046,856,000 mm²</td></tr>
+<tr><td>2 ac</td><td>8,093,712,000 mm²</td></tr>
+<tr><td>5 ac</td><td>20,234,280,000 mm²</td></tr>
+<tr><td>10 ac</td><td>40,468,560,000 mm²</td></tr>
+<tr><td>20 ac</td><td>80,937,120,000 mm²</td></tr>
+<tr><td>50 ac</td><td>202,342,800,000 mm²</td></tr>
+<tr><td>100 ac</td><td>404,685,600,000 mm²</td></tr>
+<tr><td>200 ac</td><td>809,371,200,000 mm²</td></tr>
+<tr><td>500 ac</td><td>2,023,428,000,000 mm²</td></tr>
+<tr><td>1000 ac</td><td>4,046,856,000,000 mm²</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

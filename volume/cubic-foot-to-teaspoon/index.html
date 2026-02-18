@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Cubic Foot to Teaspoon</h2>
-        <p>1 Cubic Foot (ft³) = 5,745.03 Teaspoon (tsp)</p>
+        <p>1 Cubic Foot (ft³) = 5,745.031366 Teaspoon (tsp)</p>
         <p>1 Teaspoon (tsp) = 0.0001740634535 Cubic Foot (ft³)</p>
         <p><strong>Example:</strong> convert 15 Cubic Foot (ft³) to Teaspoon (tsp):<br>
-        15 Cubic Foot (ft³) = 15 &times; 5,745.03 Teaspoon (tsp) = 86,175.5 Teaspoon (tsp)</p>
+        15 Cubic Foot (ft³) = 15 &times; 5,745.031366 Teaspoon (tsp) = 86,175.47049 Teaspoon (tsp)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Cubic Foot [ft³]</th><th>Teaspoon [tsp]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ft³</td><td>5,745.03 tsp</td></tr>
-<tr><td>2 ft³</td><td>11,490.1 tsp</td></tr>
-<tr><td>5 ft³</td><td>28,725.2 tsp</td></tr>
-<tr><td>10 ft³</td><td>57,450.3 tsp</td></tr>
-<tr><td>20 ft³</td><td>114,901 tsp</td></tr>
-<tr><td>50 ft³</td><td>287,252 tsp</td></tr>
-<tr><td>100 ft³</td><td>574,503 tsp</td></tr>
-<tr><td>200 ft³</td><td>1.14901e+06 tsp</td></tr>
-<tr><td>500 ft³</td><td>2.87252e+06 tsp</td></tr>
-<tr><td>1000 ft³</td><td>5.74503e+06 tsp</td></tr>
+            <tr><td>1 ft³</td><td>5,745.031366 tsp</td></tr>
+<tr><td>2 ft³</td><td>11,490.06273 tsp</td></tr>
+<tr><td>5 ft³</td><td>28,725.15683 tsp</td></tr>
+<tr><td>10 ft³</td><td>57,450.31366 tsp</td></tr>
+<tr><td>20 ft³</td><td>114,900.6273 tsp</td></tr>
+<tr><td>50 ft³</td><td>287,251.5683 tsp</td></tr>
+<tr><td>100 ft³</td><td>574,503.1366 tsp</td></tr>
+<tr><td>200 ft³</td><td>1,149,006.273 tsp</td></tr>
+<tr><td>500 ft³</td><td>2,872,515.683 tsp</td></tr>
+<tr><td>1000 ft³</td><td>5,745,031.366 tsp</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

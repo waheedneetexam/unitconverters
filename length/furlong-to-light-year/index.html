@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Furlong to Light Year</h2>
-        <p>1 Furlong (fur) = 2.126286862e-14 Light Year (ly)</p>
-        <p>1 Light Year (ly) = 4.70303e+13 Furlong (fur)</p>
+        <p>1 Furlong (fur) = 0.0000000000000212629 Light Year (ly)</p>
+        <p>1 Light Year (ly) = 47,030,342,800,000 Furlong (fur)</p>
         <p><strong>Example:</strong> convert 15 Furlong (fur) to Light Year (ly):<br>
-        15 Furlong (fur) = 15 &times; 2.126286862e-14 Light Year (ly) = 3.189430293e-13 Light Year (ly)</p>
+        15 Furlong (fur) = 15 &times; 0.0000000000000212629 Light Year (ly) = 0.000000000000318943 Light Year (ly)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Furlong [fur]</th><th>Light Year [ly]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 fur</td><td>2.126286862e-14 ly</td></tr>
-<tr><td>2 fur</td><td>4.252573724e-14 ly</td></tr>
-<tr><td>5 fur</td><td>1.063143431e-13 ly</td></tr>
-<tr><td>10 fur</td><td>2.126286862e-13 ly</td></tr>
-<tr><td>20 fur</td><td>4.252573724e-13 ly</td></tr>
-<tr><td>50 fur</td><td>1.063143431e-12 ly</td></tr>
-<tr><td>100 fur</td><td>2.126286862e-12 ly</td></tr>
-<tr><td>200 fur</td><td>4.252573724e-12 ly</td></tr>
-<tr><td>500 fur</td><td>1.063143431e-11 ly</td></tr>
-<tr><td>1000 fur</td><td>2.126286862e-11 ly</td></tr>
+            <tr><td>1 fur</td><td>0.0000000000000212629 ly</td></tr>
+<tr><td>2 fur</td><td>0.0000000000000425257 ly</td></tr>
+<tr><td>5 fur</td><td>0.000000000000106314 ly</td></tr>
+<tr><td>10 fur</td><td>0.000000000000212629 ly</td></tr>
+<tr><td>20 fur</td><td>0.000000000000425257 ly</td></tr>
+<tr><td>50 fur</td><td>0.00000000000106314 ly</td></tr>
+<tr><td>100 fur</td><td>0.00000000000212629 ly</td></tr>
+<tr><td>200 fur</td><td>0.00000000000425257 ly</td></tr>
+<tr><td>500 fur</td><td>0.0000000000106314 ly</td></tr>
+<tr><td>1000 fur</td><td>0.0000000000212629 ly</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

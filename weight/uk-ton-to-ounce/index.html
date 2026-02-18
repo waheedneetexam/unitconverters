@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert UK Ton to Ounce</h2>
-        <p>1 UK Ton (LT) = 35,840.1 Ounce (oz)</p>
+        <p>1 UK Ton (LT) = 35,840.13827 Ounce (oz)</p>
         <p>1 Ounce (oz) = 2.790167807e-05 UK Ton (LT)</p>
         <p><strong>Example:</strong> convert 15 UK Ton (LT) to Ounce (oz):<br>
-        15 UK Ton (LT) = 15 &times; 35,840.1 Ounce (oz) = 537,602 Ounce (oz)</p>
+        15 UK Ton (LT) = 15 &times; 35,840.13827 Ounce (oz) = 537,602.0741 Ounce (oz)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>UK Ton [LT]</th><th>Ounce [oz]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 LT</td><td>35,840.1 oz</td></tr>
-<tr><td>2 LT</td><td>71,680.3 oz</td></tr>
-<tr><td>5 LT</td><td>179,201 oz</td></tr>
-<tr><td>10 LT</td><td>358,401 oz</td></tr>
-<tr><td>20 LT</td><td>716,803 oz</td></tr>
-<tr><td>50 LT</td><td>1.79201e+06 oz</td></tr>
-<tr><td>100 LT</td><td>3.58401e+06 oz</td></tr>
-<tr><td>200 LT</td><td>7.16803e+06 oz</td></tr>
-<tr><td>500 LT</td><td>1.79201e+07 oz</td></tr>
-<tr><td>1000 LT</td><td>3.58401e+07 oz</td></tr>
+            <tr><td>1 LT</td><td>35,840.13827 oz</td></tr>
+<tr><td>2 LT</td><td>71,680.27655 oz</td></tr>
+<tr><td>5 LT</td><td>179,200.6914 oz</td></tr>
+<tr><td>10 LT</td><td>358,401.3827 oz</td></tr>
+<tr><td>20 LT</td><td>716,802.7655 oz</td></tr>
+<tr><td>50 LT</td><td>1,792,006.914 oz</td></tr>
+<tr><td>100 LT</td><td>3,584,013.827 oz</td></tr>
+<tr><td>200 LT</td><td>7,168,027.655 oz</td></tr>
+<tr><td>500 LT</td><td>17,920,069.14 oz</td></tr>
+<tr><td>1000 LT</td><td>35,840,138.27 oz</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

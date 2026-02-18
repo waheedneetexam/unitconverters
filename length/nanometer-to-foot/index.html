@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Nanometer to Foot</h2>
-        <p>1 Nanometer (nm) = 3.280839895e-09 Foot (ft)</p>
-        <p>1 Foot (ft) = 3.048e+08 Nanometer (nm)</p>
+        <p>1 Nanometer (nm) = 0.00000000328084 Foot (ft)</p>
+        <p>1 Foot (ft) = 304,800,000 Nanometer (nm)</p>
         <p><strong>Example:</strong> convert 15 Nanometer (nm) to Foot (ft):<br>
-        15 Nanometer (nm) = 15 &times; 3.280839895e-09 Foot (ft) = 4.921259843e-08 Foot (ft)</p>
+        15 Nanometer (nm) = 15 &times; 0.00000000328084 Foot (ft) = 0.0000000492126 Foot (ft)</p>
       </section>
 
       <!-- Definition -->
@@ -121,14 +121,14 @@
             <tr><th>Nanometer [nm]</th><th>Foot [ft]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 nm</td><td>3.280839895e-09 ft</td></tr>
-<tr><td>2 nm</td><td>6.56167979e-09 ft</td></tr>
-<tr><td>5 nm</td><td>1.640419948e-08 ft</td></tr>
-<tr><td>10 nm</td><td>3.280839895e-08 ft</td></tr>
-<tr><td>20 nm</td><td>6.56167979e-08 ft</td></tr>
-<tr><td>50 nm</td><td>1.640419948e-07 ft</td></tr>
-<tr><td>100 nm</td><td>3.280839895e-07 ft</td></tr>
-<tr><td>200 nm</td><td>6.56167979e-07 ft</td></tr>
+            <tr><td>1 nm</td><td>0.00000000328084 ft</td></tr>
+<tr><td>2 nm</td><td>0.00000000656168 ft</td></tr>
+<tr><td>5 nm</td><td>0.0000000164042 ft</td></tr>
+<tr><td>10 nm</td><td>0.0000000328084 ft</td></tr>
+<tr><td>20 nm</td><td>0.0000000656168 ft</td></tr>
+<tr><td>50 nm</td><td>0.000000164042 ft</td></tr>
+<tr><td>100 nm</td><td>0.000000328084 ft</td></tr>
+<tr><td>200 nm</td><td>0.000000656168 ft</td></tr>
 <tr><td>500 nm</td><td>1.640419948e-06 ft</td></tr>
 <tr><td>1000 nm</td><td>3.280839895e-06 ft</td></tr>
 
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

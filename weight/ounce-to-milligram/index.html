@@ -104,7 +104,7 @@
         <p>1 Ounce (oz) = 28,349.5 Milligram (mg)</p>
         <p>1 Milligram (mg) = 3.527399072e-05 Ounce (oz)</p>
         <p><strong>Example:</strong> convert 15 Ounce (oz) to Milligram (mg):<br>
-        15 Ounce (oz) = 15 &times; 28,349.5 Milligram (mg) = 425,242 Milligram (mg)</p>
+        15 Ounce (oz) = 15 &times; 28,349.5 Milligram (mg) = 425,242.5 Milligram (mg)</p>
       </section>
 
       <!-- Definition -->
@@ -123,14 +123,14 @@
           <tbody>
             <tr><td>1 oz</td><td>28,349.5 mg</td></tr>
 <tr><td>2 oz</td><td>56,699 mg</td></tr>
-<tr><td>5 oz</td><td>141,748 mg</td></tr>
+<tr><td>5 oz</td><td>141,747.5 mg</td></tr>
 <tr><td>10 oz</td><td>283,495 mg</td></tr>
 <tr><td>20 oz</td><td>566,990 mg</td></tr>
-<tr><td>50 oz</td><td>1.41748e+06 mg</td></tr>
-<tr><td>100 oz</td><td>2.83495e+06 mg</td></tr>
-<tr><td>200 oz</td><td>5.6699e+06 mg</td></tr>
-<tr><td>500 oz</td><td>1.41748e+07 mg</td></tr>
-<tr><td>1000 oz</td><td>2.83495e+07 mg</td></tr>
+<tr><td>50 oz</td><td>1,417,475 mg</td></tr>
+<tr><td>100 oz</td><td>2,834,950 mg</td></tr>
+<tr><td>200 oz</td><td>5,669,900 mg</td></tr>
+<tr><td>500 oz</td><td>14,174,750 mg</td></tr>
+<tr><td>1000 oz</td><td>28,349,500 mg</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

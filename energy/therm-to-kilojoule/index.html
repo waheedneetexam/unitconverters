@@ -104,7 +104,7 @@
         <p>1 Therm (thm) = 105,500 Kilojoule (kJ)</p>
         <p>1 Kilojoule (kJ) = 9.478672986e-06 Therm (thm)</p>
         <p><strong>Example:</strong> convert 15 Therm (thm) to Kilojoule (kJ):<br>
-        15 Therm (thm) = 15 &times; 105,500 Kilojoule (kJ) = 1.5825e+06 Kilojoule (kJ)</p>
+        15 Therm (thm) = 15 &times; 105,500 Kilojoule (kJ) = 1,582,500 Kilojoule (kJ)</p>
       </section>
 
       <!-- Definition -->
@@ -124,13 +124,13 @@
             <tr><td>1 thm</td><td>105,500 kJ</td></tr>
 <tr><td>2 thm</td><td>211,000 kJ</td></tr>
 <tr><td>5 thm</td><td>527,500 kJ</td></tr>
-<tr><td>10 thm</td><td>1.055e+06 kJ</td></tr>
-<tr><td>20 thm</td><td>2.11e+06 kJ</td></tr>
-<tr><td>50 thm</td><td>5.275e+06 kJ</td></tr>
-<tr><td>100 thm</td><td>1.055e+07 kJ</td></tr>
-<tr><td>200 thm</td><td>2.11e+07 kJ</td></tr>
-<tr><td>500 thm</td><td>5.275e+07 kJ</td></tr>
-<tr><td>1000 thm</td><td>1.055e+08 kJ</td></tr>
+<tr><td>10 thm</td><td>1,055,000 kJ</td></tr>
+<tr><td>20 thm</td><td>2,110,000 kJ</td></tr>
+<tr><td>50 thm</td><td>5,275,000 kJ</td></tr>
+<tr><td>100 thm</td><td>10,550,000 kJ</td></tr>
+<tr><td>200 thm</td><td>21,100,000 kJ</td></tr>
+<tr><td>500 thm</td><td>52,750,000 kJ</td></tr>
+<tr><td>1000 thm</td><td>105,500,000 kJ</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

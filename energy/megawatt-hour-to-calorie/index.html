@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Megawatt-Hour to Calorie</h2>
-        <p>1 Megawatt-Hour (MWh) = 8.60421e+08 Calorie (cal)</p>
-        <p>1 Calorie (cal) = 1.162222222e-09 Megawatt-Hour (MWh)</p>
+        <p>1 Megawatt-Hour (MWh) = 860,420,650.1 Calorie (cal)</p>
+        <p>1 Calorie (cal) = 0.00000000116222 Megawatt-Hour (MWh)</p>
         <p><strong>Example:</strong> convert 15 Megawatt-Hour (MWh) to Calorie (cal):<br>
-        15 Megawatt-Hour (MWh) = 15 &times; 8.60421e+08 Calorie (cal) = 1.29063e+10 Calorie (cal)</p>
+        15 Megawatt-Hour (MWh) = 15 &times; 860,420,650.1 Calorie (cal) = 12,906,309,750 Calorie (cal)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Megawatt-Hour [MWh]</th><th>Calorie [cal]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 MWh</td><td>8.60421e+08 cal</td></tr>
-<tr><td>2 MWh</td><td>1.72084e+09 cal</td></tr>
-<tr><td>5 MWh</td><td>4.3021e+09 cal</td></tr>
-<tr><td>10 MWh</td><td>8.60421e+09 cal</td></tr>
-<tr><td>20 MWh</td><td>1.72084e+10 cal</td></tr>
-<tr><td>50 MWh</td><td>4.3021e+10 cal</td></tr>
-<tr><td>100 MWh</td><td>8.60421e+10 cal</td></tr>
-<tr><td>200 MWh</td><td>1.72084e+11 cal</td></tr>
-<tr><td>500 MWh</td><td>4.3021e+11 cal</td></tr>
-<tr><td>1000 MWh</td><td>8.60421e+11 cal</td></tr>
+            <tr><td>1 MWh</td><td>860,420,650.1 cal</td></tr>
+<tr><td>2 MWh</td><td>1,720,841,300 cal</td></tr>
+<tr><td>5 MWh</td><td>4,302,103,250 cal</td></tr>
+<tr><td>10 MWh</td><td>8,604,206,501 cal</td></tr>
+<tr><td>20 MWh</td><td>17,208,413,000 cal</td></tr>
+<tr><td>50 MWh</td><td>43,021,032,500 cal</td></tr>
+<tr><td>100 MWh</td><td>86,042,065,010 cal</td></tr>
+<tr><td>200 MWh</td><td>172,084,130,000 cal</td></tr>
+<tr><td>500 MWh</td><td>430,210,325,000 cal</td></tr>
+<tr><td>1000 MWh</td><td>860,420,650,100 cal</td></tr>
 
           </tbody>
         </table>
@@ -315,7 +315,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -328,10 +328,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

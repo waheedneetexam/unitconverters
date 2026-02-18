@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Light Year to Inch</h2>
-        <p>1 Light Year (ly) = 3.72480315e+17 Inch (in)</p>
-        <p>1 Inch (in) = 2.684705634e-18 Light Year (ly)</p>
+        <p>1 Light Year (ly) = 372,480,315,000,000,000 Inch (in)</p>
+        <p>1 Inch (in) = 0.00000000000000000268 Light Year (ly)</p>
         <p><strong>Example:</strong> convert 15 Light Year (ly) to Inch (in):<br>
-        15 Light Year (ly) = 15 &times; 3.72480315e+17 Inch (in) = 5.587204724e+18 Inch (in)</p>
+        15 Light Year (ly) = 15 &times; 372,480,315,000,000,000 Inch (in) = 5,587,204,724,000,000,000 Inch (in)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Light Year [ly]</th><th>Inch [in]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ly</td><td>3.72480315e+17 in</td></tr>
-<tr><td>2 ly</td><td>7.449606299e+17 in</td></tr>
-<tr><td>5 ly</td><td>1.862401575e+18 in</td></tr>
-<tr><td>10 ly</td><td>3.72480315e+18 in</td></tr>
-<tr><td>20 ly</td><td>7.449606299e+18 in</td></tr>
-<tr><td>50 ly</td><td>1.862401575e+19 in</td></tr>
-<tr><td>100 ly</td><td>3.72480315e+19 in</td></tr>
-<tr><td>200 ly</td><td>7.449606299e+19 in</td></tr>
-<tr><td>500 ly</td><td>1.862401575e+20 in</td></tr>
-<tr><td>1000 ly</td><td>3.72480315e+20 in</td></tr>
+            <tr><td>1 ly</td><td>372,480,315,000,000,000 in</td></tr>
+<tr><td>2 ly</td><td>744,960,629,900,000,000 in</td></tr>
+<tr><td>5 ly</td><td>1,862,401,575,000,000,000 in</td></tr>
+<tr><td>10 ly</td><td>3,724,803,150,000,000,000 in</td></tr>
+<tr><td>20 ly</td><td>7,449,606,299,000,000,512 in</td></tr>
+<tr><td>50 ly</td><td>18,624,015,750,000,001,024 in</td></tr>
+<tr><td>100 ly</td><td>37,248,031,500,000,002,048 in</td></tr>
+<tr><td>200 ly</td><td>74,496,062,989,999,996,928 in</td></tr>
+<tr><td>500 ly</td><td>186,240,157,500,000,010,240 in</td></tr>
+<tr><td>1000 ly</td><td>372,480,315,000,000,020,480 in</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

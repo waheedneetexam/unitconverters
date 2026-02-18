@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Light Year to Nanometer</h2>
-        <p>1 Light Year (ly) = 9.461e+24 Nanometer (nm)</p>
-        <p>1 Nanometer (nm) = 1.056970722e-25 Light Year (ly)</p>
+        <p>1 Light Year (ly) = 9,460,999,999,999,999,746,244,608 Nanometer (nm)</p>
+        <p>1 Nanometer (nm) = 0 Light Year (ly)</p>
         <p><strong>Example:</strong> convert 15 Light Year (ly) to Nanometer (nm):<br>
-        15 Light Year (ly) = 15 &times; 9.461e+24 Nanometer (nm) = 1.41915e+26 Nanometer (nm)</p>
+        15 Light Year (ly) = 15 &times; 9,460,999,999,999,999,746,244,608 Nanometer (nm) = 141,914,999,999,999,998,341,152,768 Nanometer (nm)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Light Year [ly]</th><th>Nanometer [nm]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ly</td><td>9.461e+24 nm</td></tr>
-<tr><td>2 ly</td><td>1.8922e+25 nm</td></tr>
-<tr><td>5 ly</td><td>4.7305e+25 nm</td></tr>
-<tr><td>10 ly</td><td>9.461e+25 nm</td></tr>
-<tr><td>20 ly</td><td>1.8922e+26 nm</td></tr>
-<tr><td>50 ly</td><td>4.7305e+26 nm</td></tr>
-<tr><td>100 ly</td><td>9.461e+26 nm</td></tr>
-<tr><td>200 ly</td><td>1.8922e+27 nm</td></tr>
-<tr><td>500 ly</td><td>4.7305e+27 nm</td></tr>
-<tr><td>1000 ly</td><td>9.461e+27 nm</td></tr>
+            <tr><td>1 ly</td><td>9,460,999,999,999,999,746,244,608 nm</td></tr>
+<tr><td>2 ly</td><td>18,921,999,999,999,999,492,489,216 nm</td></tr>
+<tr><td>5 ly</td><td>47,304,999,999,999,996,583,739,392 nm</td></tr>
+<tr><td>10 ly</td><td>94,609,999,999,999,993,167,478,784 nm</td></tr>
+<tr><td>20 ly</td><td>189,219,999,999,999,986,334,957,568 nm</td></tr>
+<tr><td>50 ly</td><td>473,049,999,999,999,983,017,263,104 nm</td></tr>
+<tr><td>100 ly</td><td>946,099,999,999,999,966,034,526,208 nm</td></tr>
+<tr><td>200 ly</td><td>1,892,199,999,999,999,932,069,052,416 nm</td></tr>
+<tr><td>500 ly</td><td>4,730,499,999,999,999,967,611,584,512 nm</td></tr>
+<tr><td>1000 ly</td><td>9,460,999,999,999,999,935,223,169,024 nm</td></tr>
 
           </tbody>
         </table>
@@ -365,7 +365,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -378,10 +378,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);

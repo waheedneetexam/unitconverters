@@ -101,10 +101,10 @@
       <!-- How to Convert -->
       <section class="pair-info-card">
         <h2>How to Convert Hectare to Square Inch</h2>
-        <p>1 Hectare (ha) = 1.55e+07 Square Inch (in²)</p>
-        <p>1 Square Inch (in²) = 6.4516e-08 Hectare (ha)</p>
+        <p>1 Hectare (ha) = 15,500,031 Square Inch (in²)</p>
+        <p>1 Square Inch (in²) = 0.000000064516 Hectare (ha)</p>
         <p><strong>Example:</strong> convert 15 Hectare (ha) to Square Inch (in²):<br>
-        15 Hectare (ha) = 15 &times; 1.55e+07 Square Inch (in²) = 2.325e+08 Square Inch (in²)</p>
+        15 Hectare (ha) = 15 &times; 15,500,031 Square Inch (in²) = 232,500,465 Square Inch (in²)</p>
       </section>
 
       <!-- Definition -->
@@ -121,16 +121,16 @@
             <tr><th>Hectare [ha]</th><th>Square Inch [in²]</th></tr>
           </thead>
           <tbody>
-            <tr><td>1 ha</td><td>1.55e+07 in²</td></tr>
-<tr><td>2 ha</td><td>3.10001e+07 in²</td></tr>
-<tr><td>5 ha</td><td>7.75002e+07 in²</td></tr>
-<tr><td>10 ha</td><td>1.55e+08 in²</td></tr>
-<tr><td>20 ha</td><td>3.10001e+08 in²</td></tr>
-<tr><td>50 ha</td><td>7.75002e+08 in²</td></tr>
-<tr><td>100 ha</td><td>1.55e+09 in²</td></tr>
-<tr><td>200 ha</td><td>3.10001e+09 in²</td></tr>
-<tr><td>500 ha</td><td>7.75002e+09 in²</td></tr>
-<tr><td>1000 ha</td><td>1.55e+10 in²</td></tr>
+            <tr><td>1 ha</td><td>15,500,031 in²</td></tr>
+<tr><td>2 ha</td><td>31,000,062 in²</td></tr>
+<tr><td>5 ha</td><td>77,500,155 in²</td></tr>
+<tr><td>10 ha</td><td>155,000,310 in²</td></tr>
+<tr><td>20 ha</td><td>310,000,620 in²</td></tr>
+<tr><td>50 ha</td><td>775,001,550 in²</td></tr>
+<tr><td>100 ha</td><td>1,550,003,100 in²</td></tr>
+<tr><td>200 ha</td><td>3,100,006,200 in²</td></tr>
+<tr><td>500 ha</td><td>7,750,015,500 in²</td></tr>
+<tr><td>1000 ha</td><td>15,500,031,000 in²</td></tr>
 
           </tbody>
         </table>
@@ -293,7 +293,7 @@
     var isSwapped = false;
 
     function doConvert() {
-      var val = parseFloat(fromInput.value);
+      var val = parseFloat(String(fromInput.value).replace(/,/g, ''));
       if (isNaN(val)) { toInput.value = ''; return; }
       var result;
       if (!isSwapped) {
@@ -306,10 +306,32 @@
 
     function formatNum(n) {
       if (isNaN(n) || !isFinite(n)) return '';
+      if (n === 0) return '0';
       var abs = Math.abs(n);
-      if (abs === 0) return '0';
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
-      return parseFloat(n.toPrecision(12)).toString();
+      // Round to 10 significant digits to eliminate float noise
+      var rounded = parseFloat(n.toPrecision(10));
+      abs = Math.abs(rounded);
+      // Very small numbers (<= 1e-6): show full decimal, no exponential
+      if (abs <= 0.000001 && abs > 0) {
+        var decimals = Math.max(0, Math.min(20, -Math.floor(Math.log10(abs)) + 5));
+        return rounded.toFixed(decimals).replace(/\.?0+$/, '');
+      }
+      // All other numbers: plain string, no commas, no exponential
+      // toFixed with enough decimals, then strip trailing zeros
+      if (abs >= 1) {
+        // Integer or near-integer
+        if (rounded === Math.round(rounded)) return Math.round(rounded).toString();
+        // Has decimals
+        var dec = Math.max(0, 9 - Math.floor(Math.log10(abs)));
+        return parseFloat(rounded.toFixed(dec)).toString();
+      }
+      // Between 0.000001 and 1
+      return parseFloat(rounded.toPrecision(10)).toString();
+    }
+
+    function parseInput(s) {
+      // Strip commas in case user pastes a formatted number
+      return String(s).replace(/,/g, '');
     }
 
     fromInput.addEventListener('input', doConvert);
