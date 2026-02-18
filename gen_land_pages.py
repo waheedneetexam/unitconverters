@@ -808,24 +808,6 @@ for state in STATES:
 
 print(f"\nTotal land pages: {len(sitemap_entries)}")
 
-# ── Update sitemap ─────────────────────────────────────────────────────────────
-sitemap_path = os.path.join(BASE, "sitemap.xml")
-with open(sitemap_path, "r", encoding="utf-8") as f:
-    existing = f.read()
-
-new_entries = "\n".join(
-    f"""  <url>
-    <loc>{url}</loc>
-    <lastmod>2026-02-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>"""
-    for url in sitemap_entries
-)
-
-updated = existing.replace("</urlset>", new_entries + "\n</urlset>")
-with open(sitemap_path, "w", encoding="utf-8") as f:
-    f.write(updated)
 
 print(f"Sitemap updated with {len(sitemap_entries)} land URLs.")
-print("Done!")
+print("Done! Please run gen_sitemap.py to update sitemap.xml.")

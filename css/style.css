@@ -1284,4 +1284,48 @@ img {
   .land-btn-row button {
     width: 100%;
   }
+}/* ── Features List (About Page) ── */
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0;
+    display: grid;
+    gap: 16px;
+}
+
+.features-list li {
+    position: relative;
+    padding-left: 32px;
+    line-height: 1.6;
+}
+
+.features-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--white);
+    font-weight: 800;
+    background: var(--accent);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(224, 123, 0, 0.3);
+}
+
+.features-list strong {
+    color: var(--blue-main);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+}
+
+@media (min-width: 768px) {
+    .features-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
 }
