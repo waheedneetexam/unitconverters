@@ -259,8 +259,8 @@ def get_template(cat_key, cat_data):
     </div>
   </footer>
 
-  <script src="../js/converters.js"></script>
-  <script src="../js/app.js"></script>
+  <script src="../js/converters.js?v=2"></script>
+  <script src="../js/app.js?v=2"></script>
 </body>
 </html>"""
 

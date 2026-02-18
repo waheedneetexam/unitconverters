@@ -39,6 +39,10 @@
         if (pageTitleH1) pageTitleH1.textContent = cat.name + ' Converter';
         if (pageTitle) document.title = cat.name + ' Converter — UnitConvert.net';
 
+        // Update icon
+        const iconEl = document.querySelector('.calc-icon');
+        if (iconEl && cat.icon) iconEl.textContent = cat.icon;
+
         const defaultFrom = cat.units[0].id;
         const defaultTo = cat.units[1] ? cat.units[1].id : cat.units[0].id;
 

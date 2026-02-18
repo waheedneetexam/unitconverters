@@ -15,7 +15,7 @@ ADSENSE_PUB_ID = "ca-pub-2662293899276634"
 # ── Unit data (mirrors converters.js exactly) ─────────────────────────────────
 CATEGORIES = {
     "length": {
-        "name": "Length", "cat_label": "Length Conversion",
+        "name": "Length", "cat_label": "Length Conversion", "icon": "📏",
         "units": [
             ("meter",       "Meter",              "m",      1),
             ("kilometer",   "Kilometer",          "km",     1000),
@@ -50,7 +50,7 @@ CATEGORIES = {
         }
     },
     "temperature": {
-        "name": "Temperature", "cat_label": "Temperature Conversion",
+        "name": "Temperature", "cat_label": "Temperature Conversion", "icon": "🌡️",
         "units": [
             ("celsius",    "Celsius",    "°C",  None),
             ("fahrenheit", "Fahrenheit", "°F",  None),
@@ -67,7 +67,7 @@ CATEGORIES = {
         }
     },
     "area": {
-        "name": "Area", "cat_label": "Area Conversion",
+        "name": "Area", "cat_label": "Area Conversion", "icon": "⬛",
         "units": [
             ("sqmeter",      "Square Meter",      "m²",   1),
             ("sqkilometer",  "Square Kilometer",  "km²",  1e6),
@@ -96,7 +96,7 @@ CATEGORIES = {
         }
     },
     "volume": {
-        "name": "Volume", "cat_label": "Volume Conversion",
+        "name": "Volume", "cat_label": "Volume Conversion", "icon": "🧊",
         "units": [
             ("liter",       "Liter",             "L",      1),
             ("milliliter",  "Milliliter",         "mL",     0.001),
@@ -131,7 +131,7 @@ CATEGORIES = {
         }
     },
     "weight": {
-        "name": "Weight", "cat_label": "Weight and Mass Conversion",
+        "name": "Weight", "cat_label": "Weight and Mass Conversion", "icon": "⚖️",
         "units": [
             ("kilogram",    "Kilogram",       "kg",   1),
             ("gram",        "Gram",           "g",    0.001),
@@ -160,7 +160,7 @@ CATEGORIES = {
         }
     },
     "time": {
-        "name": "Time", "cat_label": "Time Conversion",
+        "name": "Time", "cat_label": "Time Conversion", "icon": "⏱️",
         "units": [
             ("second",      "Second",      "s",    1),
             ("millisecond", "Millisecond", "ms",   0.001),
@@ -191,7 +191,7 @@ CATEGORIES = {
         }
     },
     "speed": {
-        "name": "Speed", "cat_label": "Speed Conversion",
+        "name": "Speed", "cat_label": "Speed Conversion", "icon": "🚀",
         "units": [
             ("mps",        "Meter per Second",      "m/s",  1),
             ("kph",        "Kilometer per Hour",    "km/h", 0.277778),
@@ -212,7 +212,7 @@ CATEGORIES = {
         }
     },
     "pressure": {
-        "name": "Pressure", "cat_label": "Pressure Conversion",
+        "name": "Pressure", "cat_label": "Pressure Conversion", "icon": "🔵",
         "units": [
             ("pascal",     "Pascal",                 "Pa",   1),
             ("kilopascal", "Kilopascal",             "kPa",  1000),
@@ -239,7 +239,7 @@ CATEGORIES = {
         }
     },
     "energy": {
-        "name": "Energy", "cat_label": "Energy Conversion",
+        "name": "Energy", "cat_label": "Energy Conversion", "icon": "⚡",
         "units": [
             ("joule",       "Joule",           "J",    1),
             ("kilojoule",   "Kilojoule",       "kJ",   1000),
@@ -434,6 +434,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
     desc  = f"Easily convert {fname} ({fsym}) to {tname} ({tsym}). Free online {cat_name.lower()} converter with formula, examples, and conversion table."
     kw    = f"{fname} to {tname}, {fsym} to {tsym}, convert {fname} to {tname}, {cat_name.lower()} converter, {fname} {tname} conversion"
     canonical = f"https://www.swapunits.online/{cat_key}/{page_slug}/"
+    icon = cat["icon"]
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -465,6 +466,8 @@ def make_page(cat_key, cat, from_unit, to_unit):
   </script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2696;</text></svg>" />
   <link rel="stylesheet" href="../../css/style.css" />
+  <script src="../../js/converters.js?v=2"></script>
+  <script src="../../js/app.js?v=2"></script>
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUB_ID}" crossorigin="anonymous"></script>
 </head>
@@ -507,6 +510,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
       <article class="converter-card pair-page-card">
         <div class="converter-card-header">
           <h1>Convert {fname} to {tname}</h1>
+          <span class="calc-icon" aria-hidden="true">{icon}</span>
         </div>
         <div class="pair-page-body">
           <p class="pair-intro">Please provide values below to convert <strong>{fname} [{fsym}]</strong> to <strong>{tname} [{tsym}]</strong>, or <a href="../{reverse_slug}/">vice versa</a>.</p>
