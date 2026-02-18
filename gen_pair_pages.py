@@ -491,7 +491,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
             </div>
             <div class="pair-row">
               <label>To:</label>
-              <input type="number" id="pair-to" placeholder="Result" readonly />
+              <input type="text" id="pair-to" placeholder="Result" readonly />
               <span class="pair-unit-label">{tname} ({tsym})</span>
             </div>
             <div class="pair-btn-row">
@@ -585,8 +585,8 @@ def make_page(cat_key, cat, from_unit, to_unit):
     function formatNum(n) {{
       if (isNaN(n) || !isFinite(n)) return '';
       var abs = Math.abs(n);
-      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return n.toExponential(10);
-      if (abs >= 1000) return n.toLocaleString('en-US', {{maximumFractionDigits: 10}});
+      if (abs === 0) return '0';
+      if (abs >= 1e15 || (abs < 1e-6 && abs > 0)) return parseFloat(n.toPrecision(10)).toExponential();
       return parseFloat(n.toPrecision(12)).toString();
     }}
 

@@ -130,3 +130,4 @@ Replace all instances of `https://www.unitconvert.net/` in:
 
 ## License
 Free to use and modify for personal and commercial projects.
+python -m http.server 8000

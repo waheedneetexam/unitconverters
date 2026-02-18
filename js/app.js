@@ -81,14 +81,19 @@
         const resultEl = document.getElementById('result-value');
         const labelEl = document.getElementById('result-label');
 
+        // Explicitly set selected values (size=8 listboxes don't always
+        // honour the 'selected' attribute until JS sets .value directly)
+        fromUnit.value = defaultFrom;
+        toUnit.value = defaultTo;
+
         function doConvert() {
             const val = parseFloat(fromVal.value);
-            const from = fromUnit.value;
-            const to = toUnit.value;
-            if (isNaN(val)) { resultEl.textContent = '—'; toVal.value = ''; return; }
+            const from = fromUnit.value || defaultFrom;
+            const to = toUnit.value || defaultTo;
+            if (isNaN(val)) { resultEl.textContent = '\u2014'; toVal.value = ''; return; }
             const result = cat.convert(val, from, to);
             const formatted = formatResult(result);
-            toVal.value = formatted;
+            toVal.value = (formatted === '\u2014') ? '' : formatted;
             resultEl.textContent = formatted;
             // Update label
             const fromLabel = cat.units.find(u => u.id === from)?.label || from;
@@ -186,44 +191,6 @@
         });
     }
 
-    // ── Common Conversion links click ──
-    function bindConvLinks() {
-        document.querySelectorAll('.conv-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const cat = link.getAttribute('data-cat');
-                const from = link.getAttribute('data-from');
-                const to = link.getAttribute('data-to');
-                const val = parseFloat(link.getAttribute('data-val') || '1');
-                if (cat && from && to) {
-                    switchCategory(cat);
-                    setTimeout(() => {
-                        const fromUnit = document.getElementById('from-unit');
-                        const toUnit = document.getElementById('to-unit');
-                        const fromVal = document.getElementById('from-value');
-                        if (fromUnit) fromUnit.value = from;
-                        if (toUnit) toUnit.value = to;
-                        if (fromVal) fromVal.value = val;
-                        const cat_obj = CONVERTERS[cat];
-                        if (cat_obj) {
-                            const result = cat_obj.convert(val, from, to);
-                            const resultEl = document.getElementById('result-value');
-                            const toVal = document.getElementById('to-value');
-                            const labelEl = document.getElementById('result-label');
-                            const fromLabel = cat_obj.units.find(u => u.id === from)?.label || from;
-                            const toLabel = cat_obj.units.find(u => u.id === to)?.label || to;
-                            if (resultEl) resultEl.textContent = formatResult(result);
-                            if (toVal) toVal.value = formatResult(result);
-                            if (labelEl) labelEl.textContent = `${val} ${fromLabel} =`;
-                        }
-                        // Scroll converter into view
-                        const card = document.querySelector('.converter-card');
-                        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 50);
-                }
-            });
-        });
-    }
 
     // ── Init ──
     function init() {
@@ -235,7 +202,6 @@
         buildTabs();
         buildConverter(currentCategory);
         bindPopularItems();
-        bindConvLinks();
 
         // Highlight active nav link
         document.querySelectorAll('.nav-link').forEach(link => {
