@@ -82,12 +82,13 @@
               <select id="land-from-unit" size="8">
                 <option value="sqft">Square Feet (sq ft)</option>
 <option value="sqmeter">Square Meter (sq m)</option>
+<option value="gaj">Sq Yard (Gaj) (Gaj)</option>
 <option value="acre">Acre (Acre)</option>
+<option value="hectare">Hectare (ha)</option>
 <option value="bigha">Bigha (Bigha)</option>
 <option value="katha">Katha (Katha)</option>
 <option value="chatak">Chatak (Chatak)</option>
 <option value="decimal">Decimal (Dec)</option>
-<option value="hectare">Hectare (ha)</option>
               </select>
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:24px;">
@@ -99,12 +100,13 @@
               <select id="land-to-unit" size="8">
                 <option value="sqft">Square Feet (sq ft)</option>
 <option value="sqmeter">Square Meter (sq m)</option>
+<option value="gaj">Sq Yard (Gaj) (Gaj)</option>
 <option value="acre">Acre (Acre)</option>
+<option value="hectare">Hectare (ha)</option>
 <option value="bigha">Bigha (Bigha)</option>
 <option value="katha">Katha (Katha)</option>
 <option value="chatak">Chatak (Chatak)</option>
 <option value="decimal">Decimal (Dec)</option>
-<option value="hectare">Hectare (ha)</option>
               </select>
             </div>
           </div>
@@ -128,12 +130,13 @@
         <ul class="land-unit-list">
           <li><strong>1 Square Feet (sq ft)</strong> = 1 sq ft</li>
 <li><strong>1 Square Meter (sq m)</strong> = 10.7639 sq ft</li>
+<li><strong>1 Sq Yard (Gaj) (Gaj)</strong> = 9 sq ft</li>
 <li><strong>1 Acre (Acre)</strong> = 43,560 sq ft</li>
-<li><strong>1 Bigha (Bigha)</strong> = 14,400 sq ft — <em>Standard West Bengal Bigha</em></li>
+<li><strong>1 Hectare (ha)</strong> = 107,639 sq ft</li>
+<li><strong>1 Bigha (Bigha)</strong> = 14,400 sq ft — <em>Defined as 1600 sq yards</em></li>
 <li><strong>1 Katha (Katha)</strong> = 720 sq ft — <em>1/20 of Bigha</em></li>
 <li><strong>1 Chatak (Chatak)</strong> = 180 sq ft — <em>1/4 of Katha</em></li>
 <li><strong>1 Decimal (Dec)</strong> = 435.6 sq ft — <em>100 Decimals = 1 Acre</em></li>
-<li><strong>1 Hectare (ha)</strong> = 107,639 sq ft</li>
 
         </ul>
       </section>
@@ -154,12 +157,26 @@
             <td>1 sq ft</td>
             <td>= 0.0929031 Square Meter (sq m)</td>
           </tr><tr>
+            <td>1 Sq Yard (Gaj) (Gaj)</td>
+            <td>= 9 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 0.111111 Sq Yard (Gaj) (Gaj)</td>
+          </tr><tr>
             <td>1 Acre (Acre)</td>
             <td>= 43,560 sq ft</td>
           </tr>
           <tr>
             <td>1 sq ft</td>
             <td>= 2.29568e-05 Acre (Acre)</td>
+          </tr><tr>
+            <td>1 Hectare (ha)</td>
+            <td>= 107,639 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 9.29031e-06 Hectare (ha)</td>
           </tr><tr>
             <td>1 Bigha (Bigha)</td>
             <td>= 14,400 sq ft</td>
@@ -188,13 +205,6 @@
           <tr>
             <td>1 sq ft</td>
             <td>= 0.00229568 Decimal (Dec)</td>
-          </tr><tr>
-            <td>1 Hectare (ha)</td>
-            <td>= 107,639 sq ft</td>
-          </tr>
-          <tr>
-            <td>1 sq ft</td>
-            <td>= 9.29031e-06 Hectare (ha)</td>
           </tr>
           </tbody>
         </table>
@@ -206,13 +216,17 @@
         <ul class="pair-related-list">
           <li><a href="../uttar-pradesh-land-conversion/">Uttar Pradesh (UP)</a></li>
 <li><a href="../punjab-haryana-land-conversion/">Punjab & Haryana</a></li>
-<li><a href="../bihar-land-conversion/">Bihar</a></li>
+<li><a href="../bihar-jharkhand-land-conversion/">Bihar & Jharkhand</a></li>
 <li><a href="../rajasthan-land-conversion/">Rajasthan</a></li>
 <li><a href="../madhya-pradesh-land-conversion/">Madhya Pradesh (MP)</a></li>
 <li><a href="../gujarat-land-conversion/">Gujarat</a></li>
 <li><a href="../maharashtra-land-conversion/">Maharashtra</a></li>
 <li><a href="../tamil-nadu-land-conversion/">Tamil Nadu</a></li>
-<li><a href="../himachal-uttarakhand-land-conversion/">Himachal Pradesh & Uttarakhand</a></li>
+<li><a href="../himachal-uttarakhand-jk-land-conversion/">HP, Uttarakhand & J&K</a></li>
+<li><a href="../andhra-telangana-karnataka-land-conversion/">AP, Telangana & Karnataka</a></li>
+<li><a href="../kerala-land-conversion/">Kerala</a></li>
+<li><a href="../assam-land-conversion/">Assam</a></li>
+<li><a href="../tripura-land-conversion/">Tripura</a></li>
 
         </ul>
       </section>
@@ -254,12 +268,13 @@
     var UNITS = {
       "sqft": { label: "Square Feet", sym: "sq ft", sqft: 1, note: "" },
       "sqmeter": { label: "Square Meter", sym: "sq m", sqft: 10.7639, note: "" },
+      "gaj": { label: "Sq Yard (Gaj)", sym: "Gaj", sqft: 9, note: "" },
       "acre": { label: "Acre", sym: "Acre", sqft: 43560, note: "" },
-      "bigha": { label: "Bigha", sym: "Bigha", sqft: 14400, note: "Standard West Bengal Bigha" },
+      "hectare": { label: "Hectare", sym: "ha", sqft: 107639, note: "" },
+      "bigha": { label: "Bigha", sym: "Bigha", sqft: 14400, note: "Defined as 1600 sq yards" },
       "katha": { label: "Katha", sym: "Katha", sqft: 720, note: "1/20 of Bigha" },
       "chatak": { label: "Chatak", sym: "Chatak", sqft: 180, note: "1/4 of Katha" },
       "decimal": { label: "Decimal", sym: "Dec", sqft: 435.6, note: "100 Decimals = 1 Acre" },
-      "hectare": { label: "Hectare", sym: "ha", sqft: 107639, note: "" },
     };
 
     var fromVal  = document.getElementById('land-from-val');

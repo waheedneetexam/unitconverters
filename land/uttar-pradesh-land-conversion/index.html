@@ -82,11 +82,12 @@
               <select id="land-from-unit" size="8">
                 <option value="sqft">Square Feet (sq ft)</option>
 <option value="sqmeter">Square Meter (sq m)</option>
+<option value="gaj">Sq Yard (Gaj) (Gaj)</option>
 <option value="acre">Acre (Acre)</option>
-<option value="bigha_pucca">Bigha (Pucca) (Bigha)</option>
+<option value="hectare">Hectare (ha)</option>
+<option value="bigha_pucca">Bigha (Pucca) (Bigha P)</option>
 <option value="bigha_kachha">Bigha (Kachha) (Bigha K)</option>
 <option value="biswa_pucca">Biswa (Pucca) (Biswa)</option>
-<option value="hectare">Hectare (ha)</option>
               </select>
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:24px;">
@@ -98,11 +99,12 @@
               <select id="land-to-unit" size="8">
                 <option value="sqft">Square Feet (sq ft)</option>
 <option value="sqmeter">Square Meter (sq m)</option>
+<option value="gaj">Sq Yard (Gaj) (Gaj)</option>
 <option value="acre">Acre (Acre)</option>
-<option value="bigha_pucca">Bigha (Pucca) (Bigha)</option>
+<option value="hectare">Hectare (ha)</option>
+<option value="bigha_pucca">Bigha (Pucca) (Bigha P)</option>
 <option value="bigha_kachha">Bigha (Kachha) (Bigha K)</option>
 <option value="biswa_pucca">Biswa (Pucca) (Biswa)</option>
-<option value="hectare">Hectare (ha)</option>
               </select>
             </div>
           </div>
@@ -126,11 +128,12 @@
         <ul class="land-unit-list">
           <li><strong>1 Square Feet (sq ft)</strong> = 1 sq ft</li>
 <li><strong>1 Square Meter (sq m)</strong> = 10.7639 sq ft</li>
-<li><strong>1 Acre (Acre)</strong> = 43,560 sq ft</li>
-<li><strong>1 Bigha (Pucca) (Bigha)</strong> = 27,000 sq ft — <em>Official standard for land records</em></li>
-<li><strong>1 Bigha (Kachha) (Bigha K)</strong> = 9,075 sq ft — <em>1/3 of Pucca Bigha, used locally</em></li>
-<li><strong>1 Biswa (Pucca) (Biswa)</strong> = 1,350 sq ft — <em>1/20 of Pucca Bigha</em></li>
-<li><strong>1 Hectare (ha)</strong> = 107,639 sq ft</li>
+<li><strong>1 Sq Yard (Gaj) (Gaj)</strong> = 9 sq ft — <em>Commonly used for residential plots</em></li>
+<li><strong>1 Acre (Acre)</strong> = 43,560 sq ft — <em>Standard agricultural unit</em></li>
+<li><strong>1 Hectare (ha)</strong> = 107,639 sq ft — <em>Used in official Govt. surveys</em></li>
+<li><strong>1 Bigha (Pucca) (Bigha P)</strong> = 27,225 sq ft — <em>Standard 'Settled' Bigha</em></li>
+<li><strong>1 Bigha (Kachha) (Bigha K)</strong> = 9,075 sq ft — <em>Exactly 1/3 of Pucca Bigha</em></li>
+<li><strong>1 Biswa (Pucca) (Biswa)</strong> = 1,361.25 sq ft — <em>1/20 of Pucca Bigha</em></li>
 
         </ul>
       </section>
@@ -151,6 +154,13 @@
             <td>1 sq ft</td>
             <td>= 0.0929031 Square Meter (sq m)</td>
           </tr><tr>
+            <td>1 Sq Yard (Gaj) (Gaj)</td>
+            <td>= 9 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 0.111111 Sq Yard (Gaj) (Gaj)</td>
+          </tr><tr>
             <td>1 Acre (Acre)</td>
             <td>= 43,560 sq ft</td>
           </tr>
@@ -158,12 +168,19 @@
             <td>1 sq ft</td>
             <td>= 2.29568e-05 Acre (Acre)</td>
           </tr><tr>
-            <td>1 Bigha (Pucca) (Bigha)</td>
-            <td>= 27,000 sq ft</td>
+            <td>1 Hectare (ha)</td>
+            <td>= 107,639 sq ft</td>
           </tr>
           <tr>
             <td>1 sq ft</td>
-            <td>= 3.7037e-05 Bigha (Pucca) (Bigha)</td>
+            <td>= 9.29031e-06 Hectare (ha)</td>
+          </tr><tr>
+            <td>1 Bigha (Pucca) (Bigha P)</td>
+            <td>= 27,225 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 3.67309e-05 Bigha (Pucca) (Bigha P)</td>
           </tr><tr>
             <td>1 Bigha (Kachha) (Bigha K)</td>
             <td>= 9,075 sq ft</td>
@@ -173,18 +190,11 @@
             <td>= 0.000110193 Bigha (Kachha) (Bigha K)</td>
           </tr><tr>
             <td>1 Biswa (Pucca) (Biswa)</td>
-            <td>= 1,350 sq ft</td>
+            <td>= 1,361.25 sq ft</td>
           </tr>
           <tr>
             <td>1 sq ft</td>
-            <td>= 0.000740741 Biswa (Pucca) (Biswa)</td>
-          </tr><tr>
-            <td>1 Hectare (ha)</td>
-            <td>= 107,639 sq ft</td>
-          </tr>
-          <tr>
-            <td>1 sq ft</td>
-            <td>= 9.29031e-06 Hectare (ha)</td>
+            <td>= 0.000734619 Biswa (Pucca) (Biswa)</td>
           </tr>
           </tbody>
         </table>
@@ -195,14 +205,18 @@
         <h2>Other Indian State Land Converters</h2>
         <ul class="pair-related-list">
           <li><a href="../punjab-haryana-land-conversion/">Punjab & Haryana</a></li>
-<li><a href="../bihar-land-conversion/">Bihar</a></li>
+<li><a href="../bihar-jharkhand-land-conversion/">Bihar & Jharkhand</a></li>
 <li><a href="../west-bengal-land-conversion/">West Bengal</a></li>
 <li><a href="../rajasthan-land-conversion/">Rajasthan</a></li>
 <li><a href="../madhya-pradesh-land-conversion/">Madhya Pradesh (MP)</a></li>
 <li><a href="../gujarat-land-conversion/">Gujarat</a></li>
 <li><a href="../maharashtra-land-conversion/">Maharashtra</a></li>
 <li><a href="../tamil-nadu-land-conversion/">Tamil Nadu</a></li>
-<li><a href="../himachal-uttarakhand-land-conversion/">Himachal Pradesh & Uttarakhand</a></li>
+<li><a href="../himachal-uttarakhand-jk-land-conversion/">HP, Uttarakhand & J&K</a></li>
+<li><a href="../andhra-telangana-karnataka-land-conversion/">AP, Telangana & Karnataka</a></li>
+<li><a href="../kerala-land-conversion/">Kerala</a></li>
+<li><a href="../assam-land-conversion/">Assam</a></li>
+<li><a href="../tripura-land-conversion/">Tripura</a></li>
 
         </ul>
       </section>
@@ -244,11 +258,12 @@
     var UNITS = {
       "sqft": { label: "Square Feet", sym: "sq ft", sqft: 1, note: "" },
       "sqmeter": { label: "Square Meter", sym: "sq m", sqft: 10.7639, note: "" },
-      "acre": { label: "Acre", sym: "Acre", sqft: 43560, note: "" },
-      "bigha_pucca": { label: "Bigha (Pucca)", sym: "Bigha", sqft: 27000, note: "Official standard for land records" },
-      "bigha_kachha": { label: "Bigha (Kachha)", sym: "Bigha K", sqft: 9075, note: "1/3 of Pucca Bigha, used locally" },
-      "biswa_pucca": { label: "Biswa (Pucca)", sym: "Biswa", sqft: 1350, note: "1/20 of Pucca Bigha" },
-      "hectare": { label: "Hectare", sym: "ha", sqft: 107639, note: "" },
+      "gaj": { label: "Sq Yard (Gaj)", sym: "Gaj", sqft: 9, note: "Commonly used for residential plots" },
+      "acre": { label: "Acre", sym: "Acre", sqft: 43560, note: "Standard agricultural unit" },
+      "hectare": { label: "Hectare", sym: "ha", sqft: 107639, note: "Used in official Govt. surveys" },
+      "bigha_pucca": { label: "Bigha (Pucca)", sym: "Bigha P", sqft: 27225, note: "Standard 'Settled' Bigha" },
+      "bigha_kachha": { label: "Bigha (Kachha)", sym: "Bigha K", sqft: 9075, note: "Exactly 1/3 of Pucca Bigha" },
+      "biswa_pucca": { label: "Biswa (Pucca)", sym: "Biswa", sqft: 1361.25, note: "1/20 of Pucca Bigha" },
     };
 
     var fromVal  = document.getElementById('land-from-val');
