@@ -432,9 +432,9 @@ def make_state_page(state):
     <main class="main-content" role="main">
 
       <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="/">Home</a> <span>&rsaquo;</span>
-        <a href="../../land/">Indian Land Units</a> <span>&rsaquo;</span>
-        <span>{name}</span>
+        <a href="../../">Home</a> <span>&rsaquo;</span>
+        <a href="../">Land</a> <span>&rsaquo;</span>
+        <span>{name} Land Converter</span>
       </nav>
 
       <!-- Converter Card -->

@@ -520,8 +520,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
       <!-- Converter Card -->
       <article class="converter-card pair-page-card">
         <div class="converter-card-header">
-          <h1>Convert {fname} to {tname}</h1>
-          <span class="calc-icon" aria-hidden="true">{icon}</span>
+          <h1>{icon} Convert {fname} to {tname}</h1>
         </div>
         <div class="pair-page-body">
           <p class="pair-intro">Please provide values below to convert <strong>{fname} [{fsym}]</strong> to <strong>{tname} [{tsym}]</strong>, or <a href="../{reverse_slug}/">vice versa</a>.</p>

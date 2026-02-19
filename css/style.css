@@ -755,6 +755,14 @@ img {
   }
 }
 
+/* ── Desktop Sidebar Alignment ── */
+@media (min-width: 901px) {
+  .sidebar {
+    /* Pushes sidebar down to match breadcrumb height (approx 21px + 16px margin) */
+    padding-top: 37px;
+  }
+}
+
 /* ── Phone (≤ 600px) ── */
 @media (max-width: 600px) {
   .header-inner {

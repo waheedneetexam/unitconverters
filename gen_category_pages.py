@@ -157,11 +157,13 @@ def get_template(cat_key, cat_data):
 
       <article class="converter-card" itemscope itemtype="https://schema.org/WebApplication">
         <div class="converter-card-header">
-          <h1 id="converter-title" itemprop="name">{name} Converter</h1>
-          <span class="calc-icon" aria-hidden="true">{icon}</span>
+          <h1 id="converter-title" itemprop="name">{icon} {name} Converter</h1>
         </div>
         <div class="category-tabs" id="category-tabs" role="tablist" aria-label="Unit categories"></div>
-        <div class="converter-body" id="converter-body" role="tabpanel"></div>
+        <div class="pair-page-body">
+          <p class="pair-intro">{desc}</p>
+          <div id="converter-body" role="tabpanel"></div>
+        </div>
       </article>
 
       <div aria-label="Advertisement">
