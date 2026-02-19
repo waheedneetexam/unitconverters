@@ -1487,3 +1487,201 @@ img {
     gap: 24px;
   }
 }
+
+/* ══════════════════════════════════════════════
+   MOBILE-ONLY UI  (≤ 768px)
+   - Hamburger button + slide-in drawer
+   - Hide top nav bar, category tabs, popular converters
+   - Dropdown selects instead of listboxes
+══════════════════════════════════════════════ */
+
+/* ── Hamburger button (only visible on mobile) ── */
+.hamburger-btn {
+  display: none;
+  /* hidden on desktop */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  margin-left: auto;
+  transition: background var(--transition);
+  z-index: 1100;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: transform 0.28s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+/* Animated X when open */
+.hamburger-btn.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-btn.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Dim overlay ── */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1199;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.drawer-overlay.open {
+  display: block;
+  opacity: 1;
+}
+
+/* ── Slide-in drawer ── */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 280px;
+  max-width: 85vw;
+  background: var(--blue-dark);
+  z-index: 1200;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.drawer-title {
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.drawer-close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.drawer-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+.drawer-links {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+}
+
+.drawer-link {
+  display: block;
+  padding: 14px 24px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.drawer-link:hover,
+.drawer-link.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+  border-left-color: var(--accent);
+}
+
+/* ── Mobile converter select: dropdown style ── */
+@media (max-width: 768px) {
+
+  /* Show hamburger, hide top nav bar */
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  /* Hide category tabs — replaced by hamburger drawer */
+  #category-tabs,
+  .category-tabs {
+    display: none !important;
+  }
+
+  /* Hide Popular Converters section */
+  .popular-grid,
+  .sidebar-card:has(.popular-grid) {
+    display: none !important;
+  }
+
+  /* Make selects look like native dropdowns */
+  select[size="1"] {
+    -webkit-appearance: auto;
+    appearance: auto;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--text-dark);
+    cursor: pointer;
+    height: auto;
+  }
+
+  /* Converter field layout: vertical stack on mobile */
+  .converter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .converter-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

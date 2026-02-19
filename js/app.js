@@ -1,6 +1,7 @@
 /**
- * app.js — UI Logic for UnitConvert.net
+ * app.js — UI Logic for SwapUnits.online
  * Handles tab switching, real-time conversion, swap, copy
+ * + Mobile: hamburger menu, dropdown selects
  */
 
 (function () {
@@ -8,12 +9,89 @@
 
     // ── State ──
     let currentCategory = 'length';
+    const MOBILE_BP = 768; // px — below this = mobile behaviour
 
     // ── DOM refs ──
     const tabsContainer = document.getElementById('category-tabs');
     const converterBody = document.getElementById('converter-body');
     const pageTitle = document.getElementById('page-title');
     const pageTitleH1 = document.getElementById('converter-title');
+
+    // ── Mobile detection ──
+    function isMobile() {
+        return window.innerWidth <= MOBILE_BP;
+    }
+
+    // ─────────────────────────────────────────────
+    //  HAMBURGER MENU
+    // ─────────────────────────────────────────────
+    function buildHamburgerMenu() {
+        const headerInner = document.querySelector('.header-inner');
+        if (!headerInner || document.getElementById('hamburger-btn')) return;
+
+        // Hamburger button
+        const btn = document.createElement('button');
+        btn.id = 'hamburger-btn';
+        btn.className = 'hamburger-btn';
+        btn.setAttribute('aria-label', 'Open menu');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = '<span></span><span></span><span></span>';
+        headerInner.appendChild(btn);
+
+        // Slide-in drawer
+        const drawer = document.createElement('nav');
+        drawer.id = 'mobile-drawer';
+        drawer.className = 'mobile-drawer';
+        drawer.setAttribute('aria-label', 'Mobile navigation');
+        drawer.innerHTML = `
+          <div class="drawer-header">
+            <span class="drawer-title">Converters</span>
+            <button class="drawer-close" id="drawer-close" aria-label="Close menu">✕</button>
+          </div>
+          <div class="drawer-links"></div>
+        `;
+
+        // Populate drawer from existing nav links
+        const navLinks = document.querySelectorAll('.site-nav .nav-link');
+        const drawerLinks = drawer.querySelector('.drawer-links');
+        navLinks.forEach(link => {
+            const a = link.cloneNode(true);
+            a.classList.add('drawer-link');
+            drawerLinks.appendChild(a);
+        });
+
+        // Dim overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'drawer-overlay';
+        overlay.className = 'drawer-overlay';
+
+        document.body.appendChild(drawer);
+        document.body.appendChild(overlay);
+
+        function openDrawer() {
+            drawer.classList.add('open');
+            overlay.classList.add('open');
+            btn.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            overlay.classList.remove('open');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        btn.addEventListener('click', () => {
+            drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+        });
+        document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+        drawerLinks.querySelectorAll('.drawer-link').forEach(a => {
+            a.addEventListener('click', closeDrawer);
+        });
+    }
 
     // ── Build tabs ──
     function buildTabs() {
@@ -35,23 +113,24 @@
         const cat = CONVERTERS[categoryKey];
         if (!cat || !converterBody) return;
 
-        // Update title
         if (pageTitleH1) pageTitleH1.textContent = cat.name + ' Converter';
-        if (pageTitle) document.title = cat.name + ' Converter — UnitConvert.net';
+        if (pageTitle) document.title = cat.name + ' Converter — SwapUnits.online';
 
-        // Update icon
         const iconEl = document.querySelector('.calc-icon');
         if (iconEl && cat.icon) iconEl.textContent = cat.icon;
 
         const defaultFrom = cat.units[0].id;
         const defaultTo = cat.units[1] ? cat.units[1].id : cat.units[0].id;
 
+        // On mobile use size=1 (compact dropdown), on desktop use size=8 (listbox)
+        const selectSize = isMobile() ? '1' : '8';
+
         converterBody.innerHTML = `
       <div class="converter-grid">
         <div class="converter-field">
           <label for="from-value">From</label>
           <input type="number" id="from-value" placeholder="Enter value" value="1" autocomplete="off" />
-          <select id="from-unit" size="8" aria-label="From unit">
+          <select id="from-unit" size="${selectSize}" aria-label="From unit">
             ${cat.units.map(u => `<option value="${u.id}"${u.id === defaultFrom ? ' selected' : ''}>${u.label}</option>`).join('')}
           </select>
         </div>
@@ -61,7 +140,7 @@
         <div class="converter-field">
           <label for="to-value">To</label>
           <input type="text" id="to-value" placeholder="Result" readonly tabindex="-1" />
-          <select id="to-unit" size="8" aria-label="To unit">
+          <select id="to-unit" size="${selectSize}" aria-label="To unit">
             ${cat.units.map(u => `<option value="${u.id}"${u.id === defaultTo ? ' selected' : ''}>${u.label}</option>`).join('')}
           </select>
         </div>
@@ -75,7 +154,6 @@
       </div>
     `;
 
-        // Bind events
         const fromVal = document.getElementById('from-value');
         const fromUnit = document.getElementById('from-unit');
         const toVal = document.getElementById('to-value');
@@ -85,8 +163,6 @@
         const resultEl = document.getElementById('result-value');
         const labelEl = document.getElementById('result-label');
 
-        // Explicitly set selected values (size=8 listboxes don't always
-        // honour the 'selected' attribute until JS sets .value directly)
         fromUnit.value = defaultFrom;
         toUnit.value = defaultTo;
 
@@ -99,7 +175,6 @@
             const formatted = formatResult(result);
             toVal.value = (formatted === '\u2014') ? '' : formatted;
             resultEl.textContent = formatted;
-            // Update label
             const fromLabel = cat.units.find(u => u.id === from)?.label || from;
             const toLabel = cat.units.find(u => u.id === to)?.label || to;
             labelEl.textContent = `${val} ${fromLabel} =`;
@@ -126,10 +201,7 @@
             }
         });
 
-        // Initial conversion
         doConvert();
-
-        // Update quick-ref table if present
         buildQuickRef(categoryKey);
     }
 
@@ -154,13 +226,12 @@
     // ── Switch category ──
     function switchCategory(key) {
         currentCategory = key;
-        // Update tabs
         document.querySelectorAll('.cat-tab').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-category') === key);
         });
         buildConverter(key);
-        // Update nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
+        // Update both top nav and drawer links
+        document.querySelectorAll('.nav-link, .drawer-link').forEach(link => {
             link.classList.toggle('active', link.getAttribute('data-category') === key);
         });
     }
@@ -195,21 +266,27 @@
         });
     }
 
-
     // ── Init ──
     function init() {
-        // Detect category from page data attribute
         const bodyCategory = document.body.getAttribute('data-category');
         if (bodyCategory && CONVERTERS[bodyCategory]) {
             currentCategory = bodyCategory;
         }
+
+        buildHamburgerMenu();
         buildTabs();
         buildConverter(currentCategory);
         bindPopularItems();
 
-        // Highlight active nav link
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.toggle('active', link.getAttribute('data-category') === currentCategory);
+        });
+
+        // Rebuild on resize so select size updates correctly
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => buildConverter(currentCategory), 150);
         });
     }
 
