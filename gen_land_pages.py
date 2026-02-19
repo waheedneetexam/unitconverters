@@ -159,6 +159,7 @@ STATES = [
             ("hectare", "Hectare",      "ha",     107639,  ""),
             ("ground",  "Ground",       "Ground", 2400,    "Standard for Chennai real estate"),
             ("cent",    "Cent",         "Cent",   435.6,   "1/100 of an Acre"),
+            ("are",     "Are",          "Are",    1076.39, ""),
         ],
     },
     {
@@ -276,25 +277,32 @@ NAV_CATS = [
     ("length","📏 Length"), ("temperature","🌡️ Temperature"), ("area","⬛ Area"),
     ("volume","🧊 Volume"), ("weight","⚖️ Weight"), ("time","⏱️ Time"),
     ("speed","🚀 Speed"), ("pressure","🔵 Pressure"), ("energy","⚡ Energy"),
+    ("land", "🌾 Land"),
+    ("date-calculator", "📅 Date Calculator"),
 ]
 
 def make_nav_links(active_key="land"):
     links = ""
     for nk, nn in NAV_CATS:
         active = ' class="nav-link active"' if nk == active_key else ' class="nav-link"'
-        links += f'<a href="../../{nk}/"{active}>{nn}</a>\n      '
-    # Land link
-    active = ' class="nav-link active"' if active_key == "land" else ' class="nav-link"'
-    links += f'<a href="../../land/"{active}>🌾 Land</a>\n      '
+        if nk == "date-calculator":
+            links += f'<a href="../../date-calculator.html"{active}>{nn}</a>\n      '
+        elif nk == "land":
+            links += f'<a href="../../land/"{active}>{nn}</a>\n      '
+        else:
+            links += f'<a href="../../{nk}/"{active}>{nn}</a>\n      '
     return links
 
 def make_sidebar_links(active_key="land"):
     links = ""
     for nk, nn in NAV_CATS:
         active = ' active' if nk == active_key else ''
-        links += f'<a href="../../{nk}/" class="sidebar-link{active}">{nn} Converter</a>\n          '
-    active = ' active' if active_key == "land" else ''
-    links += f'<a href="../../land/" class="sidebar-link{active}">🌾 Indian Land Units</a>\n          '
+        if nk == "date-calculator":
+            links += f'<a href="../../date-calculator.html" class="sidebar-link{active}">{nn}</a>\n          '
+        elif nk == "land":
+            links += f'<a href="../../land/" class="sidebar-link{active}">{nn}</a>\n          '
+        else:
+            links += f'<a href="../../{nk}/" class="sidebar-link{active}">{nn} Converter</a>\n          '
     return links
 
 # ── State page generator ───────────────────────────────────────────────────────
@@ -662,15 +670,26 @@ def make_hub_page():
         </a>"""
 
     # Nav for hub page (one level up from state pages)
+    # Nav for hub page (one level up from state pages)
     nav_links = ""
     for nk, nn in NAV_CATS:
-        nav_links += f'<a href="../{nk}/" class="nav-link">{nn}</a>\n      '
-    nav_links += '<a href="../land/" class="nav-link active">🌾 Land</a>\n      '
+        active = ' class="nav-link active"' if nk == "land" else ' class="nav-link"'
+        if nk == "date-calculator":
+            nav_links += f'<a href="../date-calculator.html"{active}>{nn}</a>\n      '
+        elif nk == "land":
+            nav_links += f'<a href="../land/"{active}>{nn}</a>\n      '
+        else:
+            nav_links += f'<a href="../{nk}/"{active}>{nn}</a>\n      '
 
     sidebar_links = ""
     for nk, nn in NAV_CATS:
-        sidebar_links += f'<a href="../{nk}/" class="sidebar-link">{nn} Converter</a>\n          '
-    sidebar_links += '<a href="../land/" class="sidebar-link active">🌾 Indian Land Units</a>\n          '
+        active = ' active' if nk == "land" else ''
+        if nk == "date-calculator":
+            sidebar_links += f'<a href="../date-calculator.html" class="sidebar-link{active}">{nn}</a>\n          '
+        elif nk == "land":
+            sidebar_links += f'<a href="../land/" class="sidebar-link{active}">{nn}</a>\n          '
+        else:
+            sidebar_links += f'<a href="../{nk}/" class="sidebar-link{active}">{nn} Converter</a>\n          '
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -795,9 +814,44 @@ def make_hub_page():
   </div>
 
   <footer class="site-footer" role="contentinfo">
-    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:16px 20px;display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
+    <div class="footer-top" style="max-width:1200px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:40px;">
+      <div class="footer-brand">
+        <div class="site-logo">Swap<span class="logo-accent">Units</span><span class="logo-tld">.online</span></div>
+        <p style="color:rgba(255,255,255,0.6);margin-top:12px;font-size:0.9rem;line-height:1.6;">Free, fast, and accurate unit conversion for everyone. Supporting all major measurement systems worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">Converters</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/length/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Length</a></li>
+          <li><a href="/temperature/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Temperature</a></li>
+          <li><a href="/area/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Area</a></li>
+          <li><a href="/volume/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Volume</a></li>
+          <li><a href="/weight/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Weight</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">More</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/time/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Time</a></li>
+          <li><a href="/speed/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Speed</a></li>
+          <li><a href="/pressure/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Pressure</a></li>
+          <li><a href="/energy/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Energy</a></li>
+          <li><a href="/land/" style="color:rgba(255,255,255,0.6);text-decoration:none;">Land</a></li>
+          <li><a href="/date-calculator.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">Date Calculator</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 style="color:var(--white);margin-bottom:20px;font-size:1rem;">Info</h4>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="/about.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">About</a></li>
+          <li><a href="/privacy.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">Privacy Policy</a></li>
+          <li><a href="/sitemap.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:20px;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.45);">
       <span>&copy; 2026 SwapUnits.online &mdash; All rights reserved.</span>
-      <span><a href="/privacy.html">Privacy</a> &middot; <a href="/sitemap.html">Sitemap</a></span>
+      <span><a href="/privacy.html" style="color:inherit;">Privacy</a> &middot; <a href="/sitemap.html" style="color:inherit;">Sitemap</a></span>
     </div>
   </footer>
 

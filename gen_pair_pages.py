@@ -419,6 +419,7 @@ def make_page(cat_key, cat, from_unit, to_unit):
         ("volume","🧊 Volume"), ("weight","⚖️ Weight"), ("time","⏱️ Time"),
         ("speed","🚀 Speed"), ("pressure","🔵 Pressure"), ("energy","⚡ Energy"),
         ("land","🌾 Land"),
+        ("date-calculator", "📅 Date Calculator"),
     ]
     for nk, nn in nav_cats:
         active = ' class="nav-link active"' if nk == cat_key else ' class="nav-link"'
@@ -428,7 +429,12 @@ def make_page(cat_key, cat, from_unit, to_unit):
     sidebar_links = ""
     for nk, nn in nav_cats:
         active = ' active' if nk == cat_key else ''
-        sidebar_links += f'<a href="../../{nk}/" class="sidebar-link{active}">{nn} Converter</a>\n          '
+        if nk == "date-calculator":
+            sidebar_links += f'<a href="../../date-calculator.html" class="sidebar-link{active}">{nn}</a>\n          '
+        elif nk == "land":
+             sidebar_links += f'<a href="../../land/" class="sidebar-link{active}">{nn} Converter</a>\n          '
+        else:
+            sidebar_links += f'<a href="../../{nk}/" class="sidebar-link{active}">{nn} Converter</a>\n          '
 
     title = f"Convert {fname} to {tname} | {fname} to {tname} Converter"
     desc  = f"Easily convert {fname} ({fsym}) to {tname} ({tsym}). Free online {cat_name.lower()} converter with formula, examples, and conversion table."

@@ -36,6 +36,7 @@ NAV_CATS = [
     ("pressure", "🔵 Pressure"),
     ("energy", "⚡ Energy"),
     ("land", "🌾 Land"),
+    ("date-calculator", "📅 Date Calculator"),
 ]
 
 
@@ -45,21 +46,21 @@ def make_nav_links(active_key):
     links = ""
     for k, label in NAV_CATS:
         active = ' class="nav-link active"' if k == active_key else ' class="nav-link"'
-        # For land, it might be in a different relation if we are not careful, but relative paths ../name/ should work from /name/
-        # wait, if we are in /length/, then href="../temperature/" works.
-        # But if we use absolute paths /length/ it is safer. 
-        # The existing pages use /length/, so let's stick to root-relative or just /name/
-        # The sample pair pages used ../, but typical category pages might use /name/
-        # Let's check energy/index.html from step 16. It uses /length/.
-        links += f'<a href="/{k}/"{active}>{label}</a>\n      '
+        if k == "date-calculator":
+             links += f'<a href="/date-calculator.html"{active}>{label}</a>\n      '
+        elif k == "land":
+             links += f'<a href="/land/"{active}>{label}</a>\n      '
+        else:
+             links += f'<a href="/{k}/"{active}>{label}</a>\n      '
     return links
 
 def make_sidebar_links(active_key):
     links = ""
     for k, label in NAV_CATS:
         active = ' active' if k == active_key else ''
-        cat_name = label.split(' ')[1] # remove emoji
-        if k == "land":
+        if k == "date-calculator":
+            links += f'<a href="/date-calculator.html" class="sidebar-link{active}">{label}</a>\n          '
+        elif k == "land":
             links += f'<a href="/land/" class="sidebar-link{active}">{label} Converter</a>\n          '
         else:
             links += f'<a href="/{k}/" class="sidebar-link{active}">{label} Converter</a>\n          '
@@ -254,6 +255,7 @@ def get_template(cat_key, cat_data):
           <li><a href="/pressure/">Pressure</a></li>
           <li><a href="/energy/">Energy</a></li>
           <li><a href="/land/">Land</a></li>
+          <li><a href="/date-calculator.html">Date Calculator</a></li>
         </ul>
       </div>
       <div class="footer-col">

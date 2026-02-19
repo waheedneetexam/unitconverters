@@ -72,6 +72,7 @@
       <a href="../../pressure/" class="nav-link">🔵 Pressure</a>
       <a href="../../energy/" class="nav-link">⚡ Energy</a>
       <a href="../../land/" class="nav-link active">🌾 Land</a>
+      <a href="../../date-calculator.html" class="nav-link">📅 Date Calculator</a>
       
     </div>
   </nav>
@@ -105,6 +106,7 @@
 <option value="hectare">Hectare (ha)</option>
 <option value="ground">Ground (Ground)</option>
 <option value="cent">Cent (Cent)</option>
+<option value="are">Are (Are)</option>
               </select>
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
@@ -121,6 +123,7 @@
 <option value="hectare">Hectare (ha)</option>
 <option value="ground">Ground (Ground)</option>
 <option value="cent">Cent (Cent)</option>
+<option value="are">Are (Are)</option>
               </select>
             </div>
           </div>
@@ -149,6 +152,7 @@
 <li><strong>1 Hectare (ha)</strong> = 107,639 sq ft</li>
 <li><strong>1 Ground (Ground)</strong> = 2,400 sq ft — <em>Standard for Chennai real estate</em></li>
 <li><strong>1 Cent (Cent)</strong> = 435.6 sq ft — <em>1/100 of an Acre</em></li>
+<li><strong>1 Are (Are)</strong> = 1,076.39 sq ft</li>
 
         </ul>
       </section>
@@ -203,6 +207,13 @@
           <tr>
             <td>1 sq ft</td>
             <td>= 0.00229568 Cent (Cent)</td>
+          </tr><tr>
+            <td>1 Are (Are)</td>
+            <td>= 1,076.39 sq ft</td>
+          </tr>
+          <tr>
+            <td>1 sq ft</td>
+            <td>= 0.000929031 Are (Are)</td>
           </tr>
           </tbody>
         </table>
@@ -244,7 +255,8 @@
           <a href="../../speed/" class="sidebar-link">🚀 Speed Converter</a>
           <a href="../../pressure/" class="sidebar-link">🔵 Pressure Converter</a>
           <a href="../../energy/" class="sidebar-link">⚡ Energy Converter</a>
-          <a href="../../land/" class="sidebar-link active">🌾 Indian Land Units</a>
+          <a href="../../land/" class="sidebar-link active">🌾 Land</a>
+          <a href="../../date-calculator.html" class="sidebar-link">📅 Date Calculator</a>
           
         </nav>
       </div>
@@ -311,6 +323,7 @@
       "hectare": { label: "Hectare", sym: "ha", sqft: 107639, note: "" },
       "ground": { label: "Ground", sym: "Ground", sqft: 2400, note: "Standard for Chennai real estate" },
       "cent": { label: "Cent", sym: "Cent", sqft: 435.6, note: "1/100 of an Acre" },
+      "are": { label: "Are", sym: "Are", sqft: 1076.39, note: "" },
     };
 
     var fromVal  = document.getElementById('land-from-val');
