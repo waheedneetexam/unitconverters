@@ -268,13 +268,17 @@ img {
 }
 
 /* ── Category Tabs ── */
+/* ── Category Tabs (sub-categories) — Hidden globally as per request ── */
 .category-tabs {
+  display: none !important;
+  /* Original styles:
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   padding: 16px 20px 0;
   background: var(--light-gray);
   border-bottom: 1px solid var(--border);
+  */
 }
 
 .cat-tab {
@@ -831,6 +835,11 @@ img {
   }
 
   /* Ad banner: never overflow the viewport */
+  .ad-header {
+    display: none;
+    /* hide entirely on small phones — avoids blank dark space */
+  }
+
   .ad-header ins,
   .ad-placeholder.banner {
     width: 100% !important;
@@ -1636,13 +1645,18 @@ img {
 /* ── Mobile converter select: dropdown style ── */
 @media (max-width: 768px) {
 
-  /* Show hamburger, hide top nav bar */
+  /* Show hamburger, hide top nav bar and ad banner */
   .hamburger-btn {
     display: flex;
   }
 
   .site-nav {
     display: none;
+  }
+
+  /* Hide ad banner — no ads loaded on mobile, avoids blank dark block */
+  .ad-header {
+    display: none !important;
   }
 
   /* Hide category tabs — replaced by hamburger drawer */
